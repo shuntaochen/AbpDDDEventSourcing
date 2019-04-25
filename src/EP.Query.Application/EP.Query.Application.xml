@@ -1,0 +1,205 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>EP.Query.Application</name>
+    </assembly>
+    <members>
+        <member name="M:EP.Query.DataSource.DataSourceAppService.CreateFolder(EP.Query.DataSource.CreateFolderInput)">
+            <summary>
+            创建文件夹
+            </summary>
+            <param name="input"></param>
+            <returns></returns>
+        </member>
+        <member name="M:EP.Query.DataSource.DataSourceAppService.GetALl(EP.Query.DataSource.GetALlInput)">
+            <summary>
+            分页获取指定文件夹下数据源
+            </summary>
+            <param name="input"></param>
+            <returns></returns>
+        </member>
+        <member name="M:EP.Query.DataSource.DataSourceAppService.Rename(EP.Query.DataSource.RenameInput)">
+            <summary>
+            重命名数据源
+            </summary>
+            <param name="input"></param>
+            <returns></returns>
+        </member>
+        <member name="M:EP.Query.DataSource.DataSourceAppService.Save(EP.Query.DataSource.SaveInput)">
+            <summary>
+            添加或修改数据源
+            </summary>
+            <param name="input"></param>
+            <returns></returns>
+        </member>
+        <member name="M:EP.Query.DataSource.DataSourceAppService.Delete(EP.Query.DataSource.DeleteInput)">
+            <summary>
+            删除数据源
+            </summary>
+            <param name="input"></param>
+            <returns></returns>
+        </member>
+        <member name="M:EP.Query.DataSource.DataSourceAppService.GetSchemas">
+            <summary>
+            获取数据库表架构和字段
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:EP.Query.DataSource.DataSourceAppService.Get(System.Int32)">
+            <summary>
+            获取数据源和字段
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:EP.Query.DataSource.DataSourceAppService.CreateView(System.Int32)">
+            <summary>
+            生成数据源对应的视图
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:EP.Query.DataSource.DataSourceAppService.GetViewData(System.Int32)">
+            <summary>
+            获取数据源视图数据
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
+        <member name="P:EP.Query.DataSource.DataSourceDto.DataSourceFolderId">
+            <summary>
+            文件夹编号
+            </summary>
+        </member>
+        <member name="P:EP.Query.DataSource.DataSourceDto.Name">
+            <summary>
+            名称
+            </summary>
+        </member>
+        <member name="P:EP.Query.DataSource.DataSourceDto.Type">
+            <summary>
+            类型
+            </summary>
+        </member>
+        <member name="P:EP.Query.DataSource.DataSourceDto.SourceContent">
+            <summary>
+            数据源总个数
+            </summary>
+        </member>
+        <member name="P:EP.Query.DataSource.DataSourceDto.Remark">
+            <summary>
+            备注
+            </summary>
+        </member>
+        <member name="P:EP.Query.DataSource.DataSourceDto.TenantId">
+            <summary>
+            租户编号
+            </summary>
+        </member>
+        <member name="P:EP.Query.DataSource.DataSourceDto.CreatorUserId">
+            <summary>
+            创建人
+            </summary>
+        </member>
+        <member name="P:EP.Query.DataSource.DataSourceDto.CreationTime">
+            <summary>
+            创建时间
+            </summary>
+        </member>
+        <member name="P:EP.Query.DataSource.DataSourceDto.LastModifierUserId">
+            <summary>
+            最后修改人
+            </summary>
+        </member>
+        <member name="P:EP.Query.DataSource.DataSourceDto.LastModificationTime">
+            <summary>
+            上次修改时间
+            </summary>
+        </member>
+        <member name="P:EP.Query.DataSource.DataSourceFieldDto.DataSourceId">
+            <summary>
+            数据源id
+            </summary>
+        </member>
+        <member name="P:EP.Query.DataSource.DataSourceFieldDto.Name">
+            <summary>
+            名称
+            </summary>
+        </member>
+        <member name="P:EP.Query.DataSource.DataSourceFieldDto.Type">
+            <summary>
+            类型
+            </summary>
+        </member>
+        <member name="P:EP.Query.DataSource.DataSourceFieldDto.DisplayText">
+            <summary>
+            显示名称
+            </summary>
+        </member>
+        <member name="P:EP.Query.DataSource.DataSourceFieldDto.Filter">
+            <summary>
+            过滤条件
+            </summary>
+        </member>
+        <member name="P:EP.Query.DataSource.DataSourceFieldDto.TenantId">
+            <summary>
+            租户id
+            </summary>
+        </member>
+        <member name="P:EP.Query.DataSource.DataSourceFolderDto.ParentId">
+            <summary>
+            父id
+            </summary>
+        </member>
+        <member name="P:EP.Query.DataSource.DataSourceFolderDto.Name">
+            <summary>
+            名称
+            </summary>
+        </member>
+        <member name="P:EP.Query.DataSource.DataSourceFolderDto.Level">
+            <summary>
+            层级
+            </summary>
+        </member>
+        <member name="P:EP.Query.DataSource.DataSourceFolderDto.DataSourceCount">
+            <summary>
+            数据源数
+            </summary>
+        </member>
+        <member name="P:EP.Query.DataSource.DataSourceFolderDto.TenantId">
+            <summary>
+            租户编号
+            </summary>
+        </member>
+        <member name="P:EP.Query.DataSource.DataSourceFolderDto.CreationTime">
+            <summary>
+            创建时间
+            </summary>
+        </member>
+        <member name="P:EP.Query.DataSource.DataSourceFolderDto.CreatorUserId">
+            <summary>
+            创建人
+            </summary>
+        </member>
+        <member name="P:EP.Query.DataSource.DataSourceFolderDto.LastModifierUserId">
+            <summary>
+            修改人
+            </summary>
+        </member>
+        <member name="P:EP.Query.DataSource.DataSourceFolderDto.LastModificationTime">
+            <summary>
+            修改时间
+            </summary>
+        </member>
+        <member name="F:EP.Query.QueryAppConsts.DefaultPassPhrase">
+            <summary>
+            Default pass phrase for SimpleStringCipher decrypt/encrypt operations
+            </summary>
+        </member>
+        <member name="T:EP.Query.QueryAppServiceBase">
+            <summary>
+            Derive your application services from this class.
+            </summary>
+        </member>
+    </members>
+</doc>

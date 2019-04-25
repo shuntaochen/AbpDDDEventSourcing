@@ -1,0 +1,11 @@
+﻿{
+  "culture": "zh-Hans",
+  "texts": {
+    "HelloWorld": "你好 啊!",
+    "ChangeLanguage": "切换语言",
+    "HomePage": "主页",
+    "About": "关于",
+    "Home_Description": "模板项目 主页描述...",
+    "About_Description": "关于. 你好，欢迎使用.net core的这个项目。"
+  }
+}

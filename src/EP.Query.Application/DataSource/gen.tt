@@ -1,0 +1,36 @@
+﻿
+using System.Threading.Tasks;
+
+namespace TempService
+{
+public interface ITempService{
+<# 
+var array=new string[]{"CreateFolder","GetALl","Create","Rename","Save","Delete","GetSchema","SaveConfig"};
+for(var i=0;i<array.Length;i++)
+{
+#>
+
+Task<<#=array[i]#>Output> <#=array[i]#>(<#=array[i]#>Input input);
+
+<#
+}
+#>
+}
+
+
+<# 
+for(var i=0;i<array.Length;i++)
+{
+#>
+
+public class <#=array[i]#>Input{
+}
+
+public class <#=array[i]#>Output{
+}
+
+<#
+}
+#>
+
+}

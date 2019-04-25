@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "Query.Migrator": {
+      "commandName": "Project",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      }
+    }
+  }
+}
