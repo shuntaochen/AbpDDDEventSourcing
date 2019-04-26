@@ -14,14 +14,14 @@ namespace EP.Query.DataSource
             var ret = SysDataTypes.String;
 
             if (typeIntFilters.Any(t => src.Contains(t)))
-                ret = SysDataTypes.Int;
+                ret = SysDataTypes.Number;
 
             return ret.ToString().ToLower();
         }
 
         public enum SysDataTypes
         {
-            Int, String, Datetime, Boolean
+            Number, String, Datetime, Boolean
         }
     }
 }
