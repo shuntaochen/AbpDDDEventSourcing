@@ -12,6 +12,10 @@ namespace EP.Query.DataSource
     /// </summary>
     public class DataSourceField : Entity, IMayHaveTenant
     {
+
+        public DataSourceField()
+        {
+        }
         /// <summary>
         /// 数据源id
         /// </summary>

@@ -15,14 +15,16 @@ namespace EP.Query.DataSource
         /// <summary>
         /// 文件夹编号
         /// </summary>
+        [Required]
         public int DataSourceFolderId { get; set; }
 
         //[JsonIgnore]
-        public List<DataSourceFieldDto> DataSourceFields { get; set; } = new List<DataSourceFieldDto>();
+        //public List<DataSourceFieldDto> DataSourceFields { get; set; } = new List<DataSourceFieldDto>();
 
         /// <summary>
         /// 名称
         /// </summary>
+        [Required]
         public string Name { get; set; }
         /// <summary>
         /// 类型

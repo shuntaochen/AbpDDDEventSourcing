@@ -37,7 +37,7 @@ namespace EP.Query.DataSource
         /// </summary>
         public DataSourceType Type { get; set; }
         /// <summary>
-        /// 数据源总个数
+        /// 查询内容
         /// </summary>
         public string SourceContent { get; set; }
         /// <summary>

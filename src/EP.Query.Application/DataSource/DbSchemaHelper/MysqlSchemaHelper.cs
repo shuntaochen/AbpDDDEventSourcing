@@ -16,35 +16,26 @@ namespace EP.Query.DataSource
             conn.Open();
         }
 
-        public string CreateView(string query)
-        {
-            var tempView = Guid.NewGuid().ToString();
-            var view = $"create view {tempView} as {query}";
-            MySqlCommand cmd = new MySqlCommand(view, conn);
-            cmd.ExecuteNonQuery();
-            return tempView;
-        }
-
-        public List<JObject> QueryView(string view)
+        public List<JObject> Query(string queryText, out Dictionary<string, string> columnDefinitions)
         {
             var ret = new List<JObject>();
-            var sql = $"select * from {view}";
-            MySqlCommand cmd = new MySqlCommand(sql, conn);
+            columnDefinitions = new Dictionary<string, string>();
+            MySqlCommand cmd = new MySqlCommand(queryText, conn);
             MySqlDataReader reader = null;
             try
             {
                 reader = cmd.ExecuteReader();
-                var colNames = GetColNames(reader.GetSchemaTable());
+                columnDefinitions = GetColDefinitions(reader.GetSchemaTable());
                 if (reader.HasRows)
                 {
                     while (reader.Read())
                     {
-                        string val = reader.GetString(0);
                         var line = new JObject();
-                        colNames.ForEach(colName =>
+                        foreach (var colDef in columnDefinitions)
                         {
-                            line[colName] = reader[colName]?.ToString();
-                        });
+                            line[colDef.Key] = reader[colDef.Key]?.ToString();
+
+                        }
                         ret.Add(line);
                     }
                 }
@@ -57,12 +48,12 @@ namespace EP.Query.DataSource
             return ret;
         }
 
-        private List<string> GetColNames(DataTable schemaTable)
+        private Dictionary<string, string> GetColDefinitions(DataTable schemaTable)
         {
-            var ret = new List<string>();
+            var ret = new Dictionary<string, string>();
             foreach (DataRow row in schemaTable.Rows)
             {
-                ret.Add(row["ColumnName"].ToString());
+                ret.Add(row["ColumnName"].ToString(), row[11].ToString());
             }
             return ret;
         }
@@ -95,7 +86,7 @@ namespace EP.Query.DataSource
         }
 
 
-        public Dictionary<string, string> GetColumnDefinitions(string tableName)
+        public Dictionary<string, string> GetTableColumnDefinitions(string tableName)
         {
             Dictionary<string, string> fieldDef = new Dictionary<string, string>();
             MySqlCommand cmd = null;
@@ -128,5 +119,6 @@ namespace EP.Query.DataSource
         {
             conn.Close();
         }
+
     }
 }

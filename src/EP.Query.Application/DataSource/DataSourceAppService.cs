@@ -75,8 +75,10 @@ namespace EP.Query.DataSource
         public async Task<SaveOutput> Save(SaveInput input)
         {
             var model = ObjectMapper.Map<DataSource>(input.DataSource);
-
-            return new SaveOutput { Id = await _dataSourceRepository.InsertOrUpdateAndGetIdAsync(model) };
+            var id = await _dataSourceRepository.InsertOrUpdateAndGetIdAsync(model);
+            _dataSourceFieldRepository.Delete(df => df.DataSourceId == id);
+            input.DataSourceFields.ForEach(dfo => _dataSourceFieldRepository.Insert(dfo.MapTo<DataSourceField>()));
+            return new SaveOutput { Id = id };
 
         }
         /// <summary>
@@ -100,7 +102,7 @@ namespace EP.Query.DataSource
             using (var mysql = _mysqlSchemaFactory.Create())
             {
                 var tables = mysql.GetTableNames();
-                var tableWithColumns = tables.Select(name => new { name, fields = mysql.GetColumnDefinitions(name) }).ToList();
+                var tableWithColumns = tables.Select(name => new { name, fields = mysql.GetTableColumnDefinitions(name) }).ToList();
                 ret = JArray.FromObject(tableWithColumns);
             }
 
@@ -124,38 +126,47 @@ namespace EP.Query.DataSource
         }
 
         /// <summary>
-        /// 生成数据源对应的视图
+        /// 获取数据源查询数据
         /// </summary>
-        /// <param name="id"></param>
+        /// <param name="input"></param>
         /// <returns></returns>
-        public async Task<JObject> CreateView(int id)
+        public async Task<JArray> GetQueryData(GetQueryDataInput input)
         {
-            var ret = new JObject();
-            var ds = await _dataSourceRepository.GetAsync(id);
-            using (var mysql = _mysqlSchemaFactory.Create())
-            {
-                mysql.CreateView(ds.SourceContent);
-                var cols = mysql.GetColumnDefinitions(ds.SourceContent);
-                ret = JObject.FromObject(new { ds.SourceContent, cols });
-            }
-            return ret;
-        }
-        /// <summary>
-        /// 获取数据源视图数据
-        /// </summary>
-        /// <param name="id"></param>
-        /// <returns></returns>
-        public async Task<JArray> GetViewData(int id)
-        {
+            var builder = new QueryBuilder();
+            builder.AddTableName(input.TableName);
+            builder.AddAndConditions(input.AndConditions);
+            var sql = builder.Build();
+
             var ret = new JArray();
-            var ds = await _dataSourceRepository.GetAsync(id);
+            //sql = "select * from datasouces";
             using (var mysql = _mysqlSchemaFactory.Create())
             {
-                ret = JArray.FromObject(mysql.QueryView(ds.SourceContent));
+                Dictionary<string, string> cols = new Dictionary<string, string>();
+                ret = JArray.FromObject(mysql.Query(sql, out cols));
             }
             return ret;
         }
 
+        /// <summary>
+        /// 根据查询生成字段定义
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
+        public async Task<Dictionary<string, string>> GetQueryColumns(GetQueryColumnsInput input)
+        {
+            var builder = new QueryBuilder();
+            builder.AddTableName(input.TableName);
+            builder.AddAndConditions(input.AndConditions);
+            var sql = builder.Build();
+
+            Dictionary<string, string> cols = new Dictionary<string, string>();
+            //sql = "select * from datasouces";
+            using (var mysql = _mysqlSchemaFactory.Create())
+            {
+                var data = mysql.Query("select top 1" + sql.ToLower().RemovePreFix("select"), out cols);
+            }
+            return cols;
+        }
 
     }
 }

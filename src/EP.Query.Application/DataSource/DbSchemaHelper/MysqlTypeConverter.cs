@@ -21,7 +21,7 @@ namespace EP.Query.DataSource
 
         public enum SysDataTypes
         {
-            Int, String
+            Int, String, Datetime, Boolean
         }
     }
 }

@@ -11,8 +11,8 @@ namespace EP.Query.DataSource.Profiles
         public Mapping()
         {
             //CreateMap<>
-            CreateMap<DataSource, DataSourceDto>().ForMember(m => m.DataSourceFields, f => f.MapFrom(t => t.DataSourceFields.ToList()));
-            CreateMap<DataSourceDto, DataSource>();
+            CreateMap<DataSource, DataSourceDto>();//.ForMember(m => m.DataSourceFields, f => f.Ignore());
+            CreateMap<DataSourceDto, DataSource>();//.ForMember(m => m.DataSourceFields, f => f.Ignore()); ;
 
             CreateMap<DataSourceFolder, DataSourceFieldDto>();
             CreateMap<DataSourceFieldDto, DataSourceFolder>();

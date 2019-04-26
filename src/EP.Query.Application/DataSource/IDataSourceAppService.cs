@@ -30,9 +30,9 @@ namespace EP.Query.DataSource
 
         Task<GetSchemasOutput> GetSchemas();
 
-        Task<JObject> CreateView(int id);
+        Task<Dictionary<string, string>> GetQueryColumns(GetQueryColumnsInput input);
 
-        Task<JArray> GetViewData(int id);
+        Task<JArray> GetQueryData(GetQueryDataInput input);
 
 
     }
@@ -79,6 +79,8 @@ namespace EP.Query.DataSource
     public class SaveInput
     {
         public DataSourceDto DataSource { get; set; }
+
+        public List<DataSourceFieldDto> DataSourceFields { get; set; }
     }
 
     public class SaveOutput
@@ -115,5 +117,27 @@ namespace EP.Query.DataSource
         public int Id { get; set; }
     }
 
+
+    public class GetQueryDataInput
+    {
+        [Required]
+        public string TableName { get; set; }
+        public List<string> AndConditions { get; set; }
+    }
+    public class GetQueryDataOutput
+    {
+
+    }
+    public class GetQueryColumnsInput
+    {
+        [Required]
+        public string TableName { get; set; }
+        public List<string> AndConditions { get; set; }
+    }
+
+    public class GetQueryColumnsOutput
+    {
+
+    }
 
 }
