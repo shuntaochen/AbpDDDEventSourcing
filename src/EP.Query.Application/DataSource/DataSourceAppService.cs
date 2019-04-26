@@ -115,6 +115,9 @@ namespace EP.Query.DataSource
         public async Task<JObject> Get(int id)
         {
             var model = _dataSourceRepository.GetAllIncluding(ds => ds.DataSourceFields).First(d => d.Id == id);
+
+            var x = model.MapTo<DataSourceDto>();
+
             var ret = JObject.FromObject(model);
             return ret;
 

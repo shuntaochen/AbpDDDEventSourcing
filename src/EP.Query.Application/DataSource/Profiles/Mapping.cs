@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace EP.Query.DataSource.Profiles
@@ -10,7 +11,7 @@ namespace EP.Query.DataSource.Profiles
         public Mapping()
         {
             //CreateMap<>
-            CreateMap<DataSource, DataSourceDto>();
+            CreateMap<DataSource, DataSourceDto>().ForMember(m => m.DataSourceFields, f => f.MapFrom(t => t.DataSourceFields.ToList()));
             CreateMap<DataSourceDto, DataSource>();
 
             CreateMap<DataSourceFolder, DataSourceFieldDto>();

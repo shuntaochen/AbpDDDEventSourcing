@@ -13,8 +13,8 @@ namespace EP.Query.DataSource
             var typeStringFilters = new string[] { "text", "char", "datetime" };
             var ret = SysDataTypes.String;
 
-            if (typeStringFilters.Any(t => src.Contains(t)))
-                ret = SysDataTypes.String;
+            if (typeIntFilters.Any(t => src.Contains(t)))
+                ret = SysDataTypes.Int;
 
             return ret.ToString().ToLower();
         }
