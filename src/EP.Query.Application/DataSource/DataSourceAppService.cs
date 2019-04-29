@@ -133,21 +133,21 @@ namespace EP.Query.DataSource
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
-        public async Task<JArray> GetQueryData(GetQueryDataInput input)
+        public async Task<JObject> GetQueryData(GetQueryDataInput input)
         {
             var builder = new QueryBuilder();
             builder.AddTableName(input.TableName);
             builder.AddAndConditions(input.AndConditions);
-            var sql = builder.Build();
-
+            var sql = builder.Build;
+            int totalCount = 0;
             var ret = new JArray();
             //sql = "select * from datasouces";
             using (var mysql = _mysqlSchemaFactory.Create())
             {
                 Dictionary<string, string> cols = new Dictionary<string, string>();
-                ret = JArray.FromObject(mysql.Query(sql, out cols));
+                ret = JArray.FromObject(mysql.Query(sql, out cols, out totalCount, input.PageIndex, input.PageSize));
             }
-            return ret;
+            return JObject.FromObject(new { ret, totalCount });
         }
 
         /// <summary>
@@ -160,13 +160,13 @@ namespace EP.Query.DataSource
             var builder = new QueryBuilder();
             builder.AddTableName(input.TableName);
             builder.AddAndConditions(input.AndConditions);
-            var sql = builder.Build();
+            var (total, totalCount) = builder.Build;
 
             Dictionary<string, string> cols = new Dictionary<string, string>();
             //sql = "select * from datasouces";
             using (var mysql = _mysqlSchemaFactory.Create())
             {
-                var data = mysql.Query("select top 1" + sql.ToLower().RemovePreFix("select"), out cols);
+                var data = mysql.Query(("select top 1" + total.ToLower().RemovePreFix("select"), totalCount), out cols, out var count);
             }
             return cols;
         }

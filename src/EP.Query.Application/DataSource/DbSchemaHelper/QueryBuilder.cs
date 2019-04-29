@@ -24,9 +24,11 @@ namespace EP.Query.DataSource
             _tableName = tableName;
         }
 
-        public string Build()
+        public (string total, string totalCount) Build => (Select("*"), Select("count(1)"));
+
+        private string Select(string selected)
         {
-            return $"select * from {_tableName} where 1=1 { (_conditions.Count > 0 ? "and" : "") }{string.Join(" and ", _conditions.Select(c => c.Contains('=') ? $"{c.Split('=')[0]}='{c.Split('=')[1]}'" : c))}";
+            return $"select {selected} from {_tableName} where 1=1 { (_conditions.Count > 0 ? "and" : "") }{string.Join(" and ", _conditions.Select(c => c.Contains('=') ? $"{c.Split('=')[0]}='{c.Split('=')[1]}'" : c))}";
         }
 
         public void AddAndConditions(List<string> andConditions)

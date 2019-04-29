@@ -16,36 +16,41 @@ namespace EP.Query.DataSource
             conn.Open();
         }
 
-        public List<JObject> Query(string queryText, out Dictionary<string, string> columnDefinitions)
+        public List<JObject> Query((string total, string totalCount) queryText, out Dictionary<string, string> columnDefinitions, out int totalCount, int pageIndex = 1, int pageSize = int.MaxValue)
         {
-            var ret = new List<JObject>();
-            columnDefinitions = new Dictionary<string, string>();
-            MySqlCommand cmd = new MySqlCommand(queryText, conn);
-            MySqlDataReader reader = null;
-            try
+            using (var transaction = conn.BeginTransaction())
             {
-                reader = cmd.ExecuteReader();
-                columnDefinitions = GetColDefinitions(reader.GetSchemaTable());
-                if (reader.HasRows)
-                {
-                    while (reader.Read())
-                    {
-                        var line = new JObject();
-                        foreach (var colDef in columnDefinitions)
-                        {
-                            line[colDef.Key] = reader[colDef.Key]?.ToString();
+                var ret = new List<JObject>();
+                columnDefinitions = new Dictionary<string, string>();
+                totalCount = (int)new MySqlCommand(queryText.totalCount, conn).ExecuteScalar();
 
+                MySqlCommand cmd = new MySqlCommand($"{queryText.total} limit {(pageIndex - 1) * pageSize},{pageSize}", conn);
+                MySqlDataReader reader = null;
+                try
+                {
+                    reader = cmd.ExecuteReader();
+                    columnDefinitions = GetColDefinitions(reader.GetSchemaTable());
+                    if (reader.HasRows)
+                    {
+                        while (reader.Read())
+                        {
+                            var line = new JObject();
+                            foreach (var colDef in columnDefinitions)
+                            {
+                                line[colDef.Key] = reader[colDef.Key]?.ToString();
+
+                            }
+                            ret.Add(line);
                         }
-                        ret.Add(line);
                     }
+                    reader.Close();
                 }
-                reader.Close();
+                catch (Exception e)
+                {
+                    reader.Close();
+                }
+                return ret;
             }
-            catch (Exception e)
-            {
-                reader.Close();
-            }
-            return ret;
         }
 
         private Dictionary<string, string> GetColDefinitions(DataTable schemaTable)
