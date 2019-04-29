@@ -88,8 +88,7 @@ namespace EP.Query.DataSource
         /// <returns></returns>
         public async Task Delete(DeleteInput input)
         {
-            var model = ObjectMapper.Map<DataSource>(new DataSourceDto { Id = input.Id });
-            await _dataSourceRepository.DeleteAsync(model);
+            await _dataSourceRepository.DeleteAsync(del => del.Id == input.Id);
         }
 
         /// <summary>
