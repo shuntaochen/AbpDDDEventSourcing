@@ -18,7 +18,7 @@ namespace EP.Query.DataSource
             var typeNumberFilters = new string[] { "int", "float", "decimal", "double", "byte" };
             var typeStringFilters = new string[] { "text", "char" };
             var typeDatetimeFilters = new string[] { "datetime" };
-            var typeBooleanFilters = new string[] { "true", "false" };
+            var typeBooleanFilters = new string[] { "bool" };
             var ret = SysDataTypes.String;
 
             if (typeNumberFilters.Any(t => src.Contains(t)))
