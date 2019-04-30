@@ -44,10 +44,12 @@ namespace EP.Query.DataSource
                         }
                     }
                     reader.Close();
+                    transaction.Commit();
                 }
                 catch (Exception e)
                 {
                     reader.Close();
+                    transaction.Rollback();
                 }
                 return ret;
             }
