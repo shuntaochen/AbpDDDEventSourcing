@@ -121,7 +121,7 @@ namespace EP.Query.DataSource
         {
             var model = _dataSourceRepository.GetAllIncluding(ds => ds.DataSourceFields).First(d => d.Id == id);
 
-            //var x = model.MapTo<DataSourceDto>();
+            var x = model.MapTo<DataSourceDto>();
 
             var ret = JObject.FromObject(model);
             return ret;
@@ -145,7 +145,7 @@ namespace EP.Query.DataSource
             using (var mysql = _mysqlSchemaFactory.Create())
             {
                 Dictionary<string, string> cols = new Dictionary<string, string>();
-                ret = mysql.Query(sql, out cols, out totalCount, (input.SkipCount / input.MaxResultCount + 1), input.MaxResultCount));
+                ret = mysql.Query(sql, out cols, out totalCount, (input.SkipCount / input.MaxResultCount + 1), input.MaxResultCount);
             }
             return new GetQueryDataOutput{ Items= ret.As<IReadOnlyList<JObject>>(), TotalCount=totalCount };
         }
