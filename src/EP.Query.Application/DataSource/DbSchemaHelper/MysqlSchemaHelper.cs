@@ -34,7 +34,7 @@ namespace EP.Query.DataSource
                         var line = new JObject();
                         foreach (var colDef in columnDefinitions)
                         {
-                            line[colDef.Key] = reader[colDef.Key]?.ToString();
+                            line[colDef.Key] = reader[colDef.Key]?.ToString().ToSysPreDefined();
 
                         }
                         ret.Add(line);
