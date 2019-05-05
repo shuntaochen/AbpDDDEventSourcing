@@ -32,7 +32,7 @@ namespace EP.Query.DataSource
 
         Task<Dictionary<string, string>> GetQueryColumns(GetQueryColumnsInput input);
 
-        Task<JObject> GetQueryData(GetQueryDataInput input);
+        Task<GetQueryDataOutput> GetQueryData(GetQueryDataInput input);
 
 
     }
@@ -118,16 +118,14 @@ namespace EP.Query.DataSource
     }
 
 
-    public class GetQueryDataInput
+    public class GetQueryDataInput : PagedResultRequestDto
     {
         [Required]
         public string TableName { get; set; }
         public List<string> AndConditions { get; set; }
 
-        public int PageIndex { get; set; } = 1;
-        public int PageSize { get; set; } = int.MaxValue;
     }
-    public class GetQueryDataOutput
+    public class GetQueryDataOutput:PagedResultDto<JObject>
     {
 
     }

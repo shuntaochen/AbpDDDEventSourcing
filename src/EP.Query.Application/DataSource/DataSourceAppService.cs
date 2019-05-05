@@ -133,21 +133,21 @@ namespace EP.Query.DataSource
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
-        public async Task<JObject> GetQueryData(GetQueryDataInput input)
+        public async Task<GetQueryDataOutput> GetQueryData(GetQueryDataInput input)
         {
             var builder = new QueryBuilder();
             builder.AddTableName(input.TableName);
             builder.AddAndConditions(input.AndConditions);
             var sql = builder.Build;
             int totalCount = 0;
-            var ret = new JArray();
+            var ret = new List<JObject>();
             //sql = "select * from datasouces";
             using (var mysql = _mysqlSchemaFactory.Create())
             {
                 Dictionary<string, string> cols = new Dictionary<string, string>();
-                ret = JArray.FromObject(mysql.Query(sql, out cols, out totalCount, input.PageIndex, input.PageSize));
+                ret = mysql.Query(sql, out cols, out totalCount, (input.SkipCount / input.MaxResultCount + 1), input.MaxResultCount);
             }
-            return JObject.FromObject(new { ret, totalCount });
+            return new GetQueryDataOutput{ Items= ret.As<IReadOnlyList<JObject>>(), TotalCount=totalCount };
         }
 
         /// <summary>
