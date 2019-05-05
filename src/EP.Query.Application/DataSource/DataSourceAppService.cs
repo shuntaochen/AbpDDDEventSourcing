@@ -166,7 +166,7 @@ namespace EP.Query.DataSource
             //sql = "select * from datasouces";
             using (var mysql = _mysqlSchemaFactory.Create())
             {
-                var data = mysql.Query((total, totalCount), out cols, out var count, 0, 1);
+                var data = mysql.Query((total, totalCount), out cols, out var count, 1, 1);
             }
             return cols;
         }

@@ -26,7 +26,6 @@ namespace EP.Query.DataSource
             try
             {
                 reader = cmd.ExecuteReader();
-                totalCount = (int)new MySqlCommand(queryText.totalCount, conn).ExecuteScalar();
                 columnDefinitions = GetColDefinitions(reader.GetSchemaTable());
                 if (reader.HasRows)
                 {
@@ -42,6 +41,9 @@ namespace EP.Query.DataSource
                     }
                 }
                 reader.Close();
+                var cmd1 = new MySqlCommand(queryText.totalCount, conn);
+                totalCount = int.Parse(cmd1.ExecuteScalar().ToString());
+
             }
             catch (Exception e)
             {
