@@ -41,9 +41,9 @@ namespace EP.Query.DataSource
 
     public class CreateFolderInput
     {
+        [Required]
         public string Name { get; set; }
         public int? ParentId { get; set; }
-        public object Dto { get; set; }
     }
 
     public class CreateFolderOutput
