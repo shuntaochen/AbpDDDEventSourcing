@@ -147,7 +147,7 @@ namespace EP.Query.DataSource
                 Dictionary<string, string> cols = new Dictionary<string, string>();
                 ret = mysql.Query(sql, out cols, out totalCount, (input.SkipCount / input.MaxResultCount + 1), input.MaxResultCount);
             }
-            return new GetQueryDataOutput{ Items= ret.As<IReadOnlyList<JObject>>(), TotalCount=totalCount };
+            return new GetQueryDataOutput { Items = ret.As<IReadOnlyList<JObject>>(), TotalCount = totalCount };
         }
 
         /// <summary>
@@ -166,7 +166,7 @@ namespace EP.Query.DataSource
             //sql = "select * from datasouces";
             using (var mysql = _mysqlSchemaFactory.Create())
             {
-                var data = mysql.Query(("select top 1" + total.ToLower().RemovePreFix("select"), totalCount), out cols, out var count);
+                var data = mysql.Query((total, totalCount), out cols, out var count, 0, 1);
             }
             return cols;
         }

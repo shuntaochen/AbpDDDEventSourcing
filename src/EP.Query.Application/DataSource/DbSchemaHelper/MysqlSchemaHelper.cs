@@ -18,41 +18,36 @@ namespace EP.Query.DataSource
 
         public List<JObject> Query((string total, string totalCount) queryText, out Dictionary<string, string> columnDefinitions, out int totalCount, int pageIndex = 1, int pageSize = int.MaxValue)
         {
-            using (var transaction = conn.BeginTransaction())
+            var ret = new List<JObject>();
+            columnDefinitions = new Dictionary<string, string>();
+            totalCount = 0;
+            MySqlCommand cmd = new MySqlCommand($"{queryText.total} limit {(pageIndex - 1) * pageSize},{pageSize}", conn);
+            MySqlDataReader reader = null;
+            try
             {
-                var ret = new List<JObject>();
-                columnDefinitions = new Dictionary<string, string>();
+                reader = cmd.ExecuteReader();
                 totalCount = (int)new MySqlCommand(queryText.totalCount, conn).ExecuteScalar();
-
-                MySqlCommand cmd = new MySqlCommand($"{queryText.total} limit {(pageIndex - 1) * pageSize},{pageSize}", conn);
-                MySqlDataReader reader = null;
-                try
+                columnDefinitions = GetColDefinitions(reader.GetSchemaTable());
+                if (reader.HasRows)
                 {
-                    reader = cmd.ExecuteReader();
-                    columnDefinitions = GetColDefinitions(reader.GetSchemaTable());
-                    if (reader.HasRows)
+                    while (reader.Read())
                     {
-                        while (reader.Read())
+                        var line = new JObject();
+                        foreach (var colDef in columnDefinitions)
                         {
-                            var line = new JObject();
-                            foreach (var colDef in columnDefinitions)
-                            {
-                                line[colDef.Key] = reader[colDef.Key]?.ToString();
+                            line[colDef.Key] = reader[colDef.Key]?.ToString();
 
-                            }
-                            ret.Add(line);
                         }
+                        ret.Add(line);
                     }
-                    reader.Close();
-                    transaction.Commit();
                 }
-                catch (Exception e)
-                {
-                    reader.Close();
-                    transaction.Rollback();
-                }
-                return ret;
+                reader.Close();
             }
+            catch (Exception e)
+            {
+                reader.Close();
+            }
+            return ret;
         }
 
         private Dictionary<string, string> GetColDefinitions(DataTable schemaTable)
@@ -125,6 +120,7 @@ namespace EP.Query.DataSource
         public void Dispose()
         {
             conn.Close();
+
         }
 
     }

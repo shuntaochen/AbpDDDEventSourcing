@@ -78,6 +78,10 @@ namespace EP.Query.DataSource
 
     public class SaveInput
     {
+        public SaveInput()
+        {
+            DataSourceFields = new List<DataSourceFieldDto>();
+        }
         public DataSourceDto DataSource { get; set; }
 
         public List<DataSourceFieldDto> DataSourceFields { get; set; }
@@ -120,17 +124,25 @@ namespace EP.Query.DataSource
 
     public class GetQueryDataInput : PagedResultRequestDto
     {
+        public GetQueryDataInput()
+        {
+            AndConditions = new List<string>();
+        }
         [Required]
         public string TableName { get; set; }
         public List<string> AndConditions { get; set; }
 
     }
-    public class GetQueryDataOutput:PagedResultDto<JObject>
+    public class GetQueryDataOutput : PagedResultDto<JObject>
     {
 
     }
     public class GetQueryColumnsInput
     {
+        public GetQueryColumnsInput()
+        {
+            AndConditions = new List<string>();
+        }
         [Required]
         public string TableName { get; set; }
         public List<string> AndConditions { get; set; }
