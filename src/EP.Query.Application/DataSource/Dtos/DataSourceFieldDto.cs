@@ -36,7 +36,7 @@ namespace EP.Query.DataSource
         /// </summary>
         public int? TenantId { get; set; }
         [JsonIgnore]
-        public DataSourceDto DataSource { get; set; } = new DataSourceDto();
+        public DataSourceDto DataSource { get; set; }
 
 
     }

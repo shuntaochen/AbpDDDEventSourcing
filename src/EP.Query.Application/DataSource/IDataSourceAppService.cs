@@ -1,8 +1,10 @@
 ﻿
 using Abp.Application.Services.Dto;
+using Abp.Runtime.Validation;
 using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace EP.Query.DataSource
@@ -78,13 +80,9 @@ namespace EP.Query.DataSource
 
     public class SaveInput
     {
-        public SaveInput()
-        {
-            //DataSourceFields = new List<DataSourceFieldDto>();
-        }
-        public DataSourceDto DataSource { get; set; }
+        public DataSourceDto DataSource { get; set; } = new DataSourceDto();
 
-        //public List<DataSourceFieldDto> DataSourceFields { get; set; }
+
     }
 
     public class SaveOutput

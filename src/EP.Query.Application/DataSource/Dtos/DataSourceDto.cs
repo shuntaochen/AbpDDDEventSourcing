@@ -15,12 +15,14 @@ namespace EP.Query.DataSource
         /// <summary>
         /// 文件夹编号
         /// </summary>
+        [Range(1, int.MaxValue)]
+        [Required]
         public int DataSourceFolderId { get; set; }
 
         /// <summary>
         /// 名称
         /// </summary>
-        //[Required]
+        [Required]
         public string Name { get; set; }
         /// <summary>
         /// 类型

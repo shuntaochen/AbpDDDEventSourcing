@@ -13,15 +13,11 @@ namespace EP.Query.DataSource
     public class DataSourceField : Entity, IMayHaveTenant
     {
 
-        public DataSourceField()
-        {
-        }
         /// <summary>
         /// 数据源id
         /// </summary>
         public int DataSourceId { get; set; }
 
-        [JsonIgnore]
         public DataSource DataSource { get; set; }
         /// <summary>
         /// 名称
