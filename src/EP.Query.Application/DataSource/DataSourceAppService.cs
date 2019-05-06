@@ -72,7 +72,7 @@ namespace EP.Query.DataSource
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
-        public async Task<SaveOutput> Save(SaveInput input)
+        public virtual async Task<SaveOutput> Save(SaveInput input)
         {
             input.DataSource.DataSourceFields.ForEach(f =>
             {
@@ -81,7 +81,7 @@ namespace EP.Query.DataSource
             var model = ObjectMapper.Map<DataSource>(input.DataSource);
             var id = await _dataSourceRepository.InsertOrUpdateAndGetIdAsync(model);
             _dataSourceFieldRepository.Delete(df => df.DataSourceId == id);
-            model.DataSourceFields.ForEach(dfo => _dataSourceFieldRepository.Insert(dfo.MapTo<DataSourceField>()));
+            model.DataSourceFields.ForEach(dfo => _dataSourceFieldRepository.InsertOrUpdate(dfo.MapTo<DataSourceField>()));
             return new SaveOutput { Id = id };
 
         }
@@ -90,7 +90,8 @@ namespace EP.Query.DataSource
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
-        public async Task Delete(DeleteInput input)
+        [UnitOfWork]
+        public virtual async Task Delete(DeleteInput input)
         {
             await _dataSourceRepository.DeleteAsync(del => del.Id == input.Id);
         }
