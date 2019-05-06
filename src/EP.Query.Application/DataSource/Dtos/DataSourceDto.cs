@@ -55,7 +55,7 @@ namespace EP.Query.DataSource
         /// </summary>
         public DateTime? LastModificationTime { get; set; }
 
-
+        [JsonIgnore]
         public DataSourceFolderDto DataSourceFolder { get; set; }
 
         public List<DataSourceFieldDto> DataSourceFields { get; set; } = new List<DataSourceFieldDto>();

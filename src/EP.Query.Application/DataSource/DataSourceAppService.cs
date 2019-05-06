@@ -81,7 +81,7 @@ namespace EP.Query.DataSource
             var model = ObjectMapper.Map<DataSource>(input.DataSource);
             var id = await _dataSourceRepository.InsertOrUpdateAndGetIdAsync(model);
             _dataSourceFieldRepository.Delete(df => df.DataSourceId == id);
-            model.DataSourceFields.toli.ForEach(dfo => _dataSourceFieldRepository.InsertOrUpdate(dfo.MapTo<DataSourceField>()));
+            model.DataSourceFields.ForEach(dfo => _dataSourceFieldRepository.InsertOrUpdate(dfo.MapTo<DataSourceField>()));
             return new SaveOutput { Id = id };
 
         }
