@@ -16,11 +16,12 @@ namespace EP.Query.DataSource
             conn.Open();
         }
 
-        public List<JObject> Query(string queryText, out Dictionary<string, string> columnDefinitions)
+        public List<JObject> Query((string total, string totalCount) queryText, out Dictionary<string, string> columnDefinitions, out int totalCount, int pageIndex = 1, int pageSize = int.MaxValue)
         {
             var ret = new List<JObject>();
             columnDefinitions = new Dictionary<string, string>();
-            MySqlCommand cmd = new MySqlCommand(queryText, conn);
+            totalCount = 0;
+            MySqlCommand cmd = new MySqlCommand($"{queryText.total} limit {(pageIndex - 1) * pageSize},{pageSize}", conn);
             MySqlDataReader reader = null;
             try
             {
@@ -40,6 +41,9 @@ namespace EP.Query.DataSource
                     }
                 }
                 reader.Close();
+                var cmd1 = new MySqlCommand(queryText.totalCount, conn);
+                totalCount = int.Parse(cmd1.ExecuteScalar().ToString());
+
             }
             catch (Exception e)
             {
@@ -53,7 +57,7 @@ namespace EP.Query.DataSource
             var ret = new Dictionary<string, string>();
             foreach (DataRow row in schemaTable.Rows)
             {
-                ret.Add(row["ColumnName"].ToString(), row[11].ToString());
+                ret.Add(row["ColumnName"].ToString(), row[11].ToString().ToSysPreDefined());
             }
             return ret;
         }
@@ -118,6 +122,7 @@ namespace EP.Query.DataSource
         public void Dispose()
         {
             conn.Close();
+
         }
 
     }

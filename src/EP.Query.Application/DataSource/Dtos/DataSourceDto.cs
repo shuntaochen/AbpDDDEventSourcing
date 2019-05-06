@@ -15,11 +15,9 @@ namespace EP.Query.DataSource
         /// <summary>
         /// 文件夹编号
         /// </summary>
+        [Range(1, int.MaxValue)]
         [Required]
         public int DataSourceFolderId { get; set; }
-
-        //[JsonIgnore]
-        //public List<DataSourceFieldDto> DataSourceFields { get; set; } = new List<DataSourceFieldDto>();
 
         /// <summary>
         /// 名称
@@ -58,5 +56,11 @@ namespace EP.Query.DataSource
         /// 上次修改时间
         /// </summary>
         public DateTime? LastModificationTime { get; set; }
+
+        [JsonIgnore]
+        public DataSourceFolderDto DataSourceFolder { get; set; }
+
+        public List<DataSourceFieldDto> DataSourceFields { get; set; } = new List<DataSourceFieldDto>();
+
     }
 }

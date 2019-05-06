@@ -11,14 +11,14 @@ namespace EP.Query.DataSource.Profiles
         public Mapping()
         {
             //CreateMap<>
-            CreateMap<DataSource, DataSourceDto>();//.ForMember(m => m.DataSourceFields, f => f.Ignore());
-            CreateMap<DataSourceDto, DataSource>();//.ForMember(m => m.DataSourceFields, f => f.Ignore()); ;
+            CreateMap<DataSource, DataSourceDto>();
+            CreateMap<DataSourceDto, DataSource>();
 
             CreateMap<DataSourceFolder, DataSourceFieldDto>();
             CreateMap<DataSourceFieldDto, DataSourceFolder>();
 
             CreateMap<DataSourceField, DataSourceFieldDto>();
-            CreateMap<DataSourceFieldDto, DataSourceField>();
+            CreateMap<DataSourceFieldDto, DataSourceField>();//.ForMember(s => s.DataSource, opt => opt.Ignore());
         }
 
     }

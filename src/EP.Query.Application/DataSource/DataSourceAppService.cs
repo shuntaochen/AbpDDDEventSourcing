@@ -51,8 +51,8 @@ namespace EP.Query.DataSource
         /// <returns></returns>
         public async Task<GetALlOutput> GetALl(GetALlInput input)
         {
-            var all = _dataSourceRepository.GetAll();
-            var ret = await all.Where(ds => ds.DataSourceFolderId == input.FolderId).Skip(input.SkipCount).Take(input.MaxResultCount).ToListAsync();
+            var all = _dataSourceRepository.GetAll().Where(ds => ds.DataSourceFolderId == input.FolderId);
+            var ret = await all.Skip(input.SkipCount).Take(input.MaxResultCount).ToListAsync();
             return new GetALlOutput() { Items = ret, TotalCount = await all.CountAsync() };
         }
 
@@ -72,12 +72,16 @@ namespace EP.Query.DataSource
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
-        public async Task<SaveOutput> Save(SaveInput input)
+        public virtual async Task<SaveOutput> Save(SaveInput input)
         {
+            input.DataSource.DataSourceFields.ForEach(f =>
+            {
+                if (f.DisplayText.IsNullOrEmpty()) f.DisplayText = f.Name;
+            });
             var model = ObjectMapper.Map<DataSource>(input.DataSource);
             var id = await _dataSourceRepository.InsertOrUpdateAndGetIdAsync(model);
             _dataSourceFieldRepository.Delete(df => df.DataSourceId == id);
-            input.DataSourceFields.ForEach(dfo => _dataSourceFieldRepository.Insert(dfo.MapTo<DataSourceField>()));
+            model.DataSourceFields.ForEach(dfo => _dataSourceFieldRepository.InsertOrUpdate(dfo.MapTo<DataSourceField>()));
             return new SaveOutput { Id = id };
 
         }
@@ -86,10 +90,10 @@ namespace EP.Query.DataSource
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
-        public async Task Delete(DeleteInput input)
+        [UnitOfWork]
+        public virtual async Task Delete(DeleteInput input)
         {
-            var model = ObjectMapper.Map<DataSource>(new DataSourceDto { Id = input.Id });
-            await _dataSourceRepository.DeleteAsync(model);
+            await _dataSourceRepository.DeleteAsync(del => del.Id == input.Id);
         }
 
         /// <summary>
@@ -114,13 +118,12 @@ namespace EP.Query.DataSource
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public async Task<JObject> Get(int id)
+        public async Task<DataSourceDto> Get(int id)
         {
             var model = _dataSourceRepository.GetAllIncluding(ds => ds.DataSourceFields).First(d => d.Id == id);
 
-            var x = model.MapTo<DataSourceDto>();
+            var ret = model.MapTo<DataSourceDto>();
 
-            var ret = JObject.FromObject(model);
             return ret;
 
         }
@@ -130,21 +133,21 @@ namespace EP.Query.DataSource
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
-        public async Task<JArray> GetQueryData(GetQueryDataInput input)
+        public async Task<GetQueryDataOutput> GetQueryData(GetQueryDataInput input)
         {
             var builder = new QueryBuilder();
             builder.AddTableName(input.TableName);
             builder.AddAndConditions(input.AndConditions);
-            var sql = builder.Build();
-
-            var ret = new JArray();
+            var sql = builder.Build;
+            int totalCount = 0;
+            var ret = new List<JObject>();
             //sql = "select * from datasouces";
             using (var mysql = _mysqlSchemaFactory.Create())
             {
                 Dictionary<string, string> cols = new Dictionary<string, string>();
-                ret = JArray.FromObject(mysql.Query(sql, out cols));
+                ret = mysql.Query(sql, out cols, out totalCount, (input.SkipCount / input.MaxResultCount + 1), input.MaxResultCount);
             }
-            return ret;
+            return new GetQueryDataOutput { Items = ret.As<IReadOnlyList<JObject>>(), TotalCount = totalCount };
         }
 
         /// <summary>
@@ -157,13 +160,13 @@ namespace EP.Query.DataSource
             var builder = new QueryBuilder();
             builder.AddTableName(input.TableName);
             builder.AddAndConditions(input.AndConditions);
-            var sql = builder.Build();
+            var (total, totalCount) = builder.Build;
 
             Dictionary<string, string> cols = new Dictionary<string, string>();
             //sql = "select * from datasouces";
             using (var mysql = _mysqlSchemaFactory.Create())
             {
-                var data = mysql.Query("select top 1" + sql.ToLower().RemovePreFix("select"), out cols);
+                var data = mysql.Query((total, totalCount), out cols, out var count, 1, 1);
             }
             return cols;
         }

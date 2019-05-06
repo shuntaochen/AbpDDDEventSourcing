@@ -1,8 +1,10 @@
 ﻿
 using Abp.Application.Services.Dto;
+using Abp.Runtime.Validation;
 using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace EP.Query.DataSource
@@ -16,7 +18,7 @@ namespace EP.Query.DataSource
         Task<GetALlOutput> GetALl(GetALlInput input);
 
 
-        Task<JObject> Get(int id);
+        Task<DataSourceDto> Get(int id);
 
 
         Task<RenameOutput> Rename(RenameInput input);
@@ -32,7 +34,7 @@ namespace EP.Query.DataSource
 
         Task<Dictionary<string, string>> GetQueryColumns(GetQueryColumnsInput input);
 
-        Task<JArray> GetQueryData(GetQueryDataInput input);
+        Task<GetQueryDataOutput> GetQueryData(GetQueryDataInput input);
 
 
     }
@@ -41,9 +43,9 @@ namespace EP.Query.DataSource
 
     public class CreateFolderInput
     {
+        [Required]
         public string Name { get; set; }
         public int? ParentId { get; set; }
-        public object Dto { get; set; }
     }
 
     public class CreateFolderOutput
@@ -78,9 +80,9 @@ namespace EP.Query.DataSource
 
     public class SaveInput
     {
-        public DataSourceDto DataSource { get; set; }
+        public DataSourceDto DataSource { get; set; } = new DataSourceDto();
 
-        public List<DataSourceFieldDto> DataSourceFields { get; set; }
+
     }
 
     public class SaveOutput
@@ -118,18 +120,27 @@ namespace EP.Query.DataSource
     }
 
 
-    public class GetQueryDataInput
+    public class GetQueryDataInput : PagedResultRequestDto
     {
+        public GetQueryDataInput()
+        {
+            AndConditions = new List<string>();
+        }
         [Required]
         public string TableName { get; set; }
         public List<string> AndConditions { get; set; }
+
     }
-    public class GetQueryDataOutput
+    public class GetQueryDataOutput : PagedResultDto<JObject>
     {
 
     }
     public class GetQueryColumnsInput
     {
+        public GetQueryColumnsInput()
+        {
+            AndConditions = new List<string>();
+        }
         [Required]
         public string TableName { get; set; }
         public List<string> AndConditions { get; set; }

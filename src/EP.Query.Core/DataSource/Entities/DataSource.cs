@@ -16,17 +16,15 @@ namespace EP.Query.DataSource
     {
         private DataSource()
         {
-
+            DomainEvents.Add(new CreateDataSourceEventData(this));
         }
         /// <summary>
         /// 文件夹编号
         /// </summary>
         public int DataSourceFolderId { get; set; }
-        [JsonIgnore]
         public virtual DataSourceFolder DataSourceFolder { get; set; }
 
-        //[JsonIgnore]
-        public virtual ICollection<DataSourceField> DataSourceFields { get; set; }
+        public virtual List<DataSourceField> DataSourceFields { get; set; } = new List<DataSourceField>();
 
         /// <summary>
         /// 名称
