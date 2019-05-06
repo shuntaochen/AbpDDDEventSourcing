@@ -16,7 +16,7 @@ namespace EP.Query.DataSource
     {
         private DataSource()
         {
-
+            DomainEvents.Add(new CreateDataSourceEventData(this));
         }
         /// <summary>
         /// 文件夹编号
