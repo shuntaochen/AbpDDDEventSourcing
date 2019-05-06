@@ -51,8 +51,8 @@ namespace EP.Query.DataSource
         /// <returns></returns>
         public async Task<GetALlOutput> GetALl(GetALlInput input)
         {
-            var all = _dataSourceRepository.GetAll();
-            var ret = await all.Where(ds => ds.DataSourceFolderId == input.FolderId).Skip(input.SkipCount).Take(input.MaxResultCount).ToListAsync();
+            var all = _dataSourceRepository.GetAll().Where(ds => ds.DataSourceFolderId == input.FolderId);
+            var ret = await all.Skip(input.SkipCount).Take(input.MaxResultCount).ToListAsync();
             return new GetALlOutput() { Items = ret, TotalCount = await all.CountAsync() };
         }
 
