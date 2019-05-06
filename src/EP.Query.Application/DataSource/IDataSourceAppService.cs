@@ -80,11 +80,11 @@ namespace EP.Query.DataSource
     {
         public SaveInput()
         {
-            DataSourceFields = new List<DataSourceFieldDto>();
+            //DataSourceFields = new List<DataSourceFieldDto>();
         }
         public DataSourceDto DataSource { get; set; }
 
-        public List<DataSourceFieldDto> DataSourceFields { get; set; }
+        //public List<DataSourceFieldDto> DataSourceFields { get; set; }
     }
 
     public class SaveOutput

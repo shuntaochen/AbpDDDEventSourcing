@@ -25,8 +25,8 @@ namespace EP.Query.DataSource
         [JsonIgnore]
         public virtual DataSourceFolder DataSourceFolder { get; set; }
 
-        //[JsonIgnore]
-        public virtual ICollection<DataSourceField> DataSourceFields { get; set; }
+        [JsonIgnore]
+        public virtual List<DataSourceField> DataSourceFields { get; set; } = new List<DataSourceField>();
 
         /// <summary>
         /// 名称

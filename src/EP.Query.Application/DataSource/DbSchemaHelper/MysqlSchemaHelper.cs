@@ -34,7 +34,7 @@ namespace EP.Query.DataSource
                         var line = new JObject();
                         foreach (var colDef in columnDefinitions)
                         {
-                            line[colDef.Key] = reader[colDef.Key]?.ToString().ToSysPreDefined();
+                            line[colDef.Key] = reader[colDef.Key]?.ToString();
 
                         }
                         ret.Add(line);
@@ -57,7 +57,7 @@ namespace EP.Query.DataSource
             var ret = new Dictionary<string, string>();
             foreach (DataRow row in schemaTable.Rows)
             {
-                ret.Add(row["ColumnName"].ToString(), row[11].ToString());
+                ret.Add(row["ColumnName"].ToString(), row[11].ToString().ToSysPreDefined());
             }
             return ret;
         }

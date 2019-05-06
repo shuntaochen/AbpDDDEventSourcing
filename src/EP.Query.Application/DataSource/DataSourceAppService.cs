@@ -74,14 +74,14 @@ namespace EP.Query.DataSource
         /// <returns></returns>
         public async Task<SaveOutput> Save(SaveInput input)
         {
-            input.DataSourceFields.ForEach(f =>
+            input.DataSource.DataSourceFields.ForEach(f =>
             {
                 if (f.DisplayText.IsNullOrEmpty()) f.DisplayText = f.Name;
             });
             var model = ObjectMapper.Map<DataSource>(input.DataSource);
             var id = await _dataSourceRepository.InsertOrUpdateAndGetIdAsync(model);
             _dataSourceFieldRepository.Delete(df => df.DataSourceId == id);
-            input.DataSourceFields.ForEach(dfo => _dataSourceFieldRepository.Insert(dfo.MapTo<DataSourceField>()));
+            model.DataSourceFields.ForEach(dfo => _dataSourceFieldRepository.Insert(dfo.MapTo<DataSourceField>()));
             return new SaveOutput { Id = id };
 
         }

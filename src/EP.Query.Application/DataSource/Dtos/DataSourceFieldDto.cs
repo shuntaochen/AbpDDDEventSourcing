@@ -15,8 +15,6 @@ namespace EP.Query.DataSource
         /// </summary>
         public int DataSourceId { get; set; }
 
-        [JsonIgnore]
-        public DataSourceDto DataSource { get; set; } = new DataSourceDto();
         /// <summary>
         /// 名称
         /// </summary>
@@ -37,5 +35,9 @@ namespace EP.Query.DataSource
         /// 租户id
         /// </summary>
         public int? TenantId { get; set; }
+
+        public DataSourceDto DataSource { get; set; } = new DataSourceDto();
+
+
     }
 }
