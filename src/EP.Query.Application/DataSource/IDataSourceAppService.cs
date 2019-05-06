@@ -16,7 +16,7 @@ namespace EP.Query.DataSource
         Task<GetALlOutput> GetALl(GetALlInput input);
 
 
-        Task<JObject> Get(int id);
+        Task<DataSourceDto> Get(int id);
 
 
         Task<RenameOutput> Rename(RenameInput input);
