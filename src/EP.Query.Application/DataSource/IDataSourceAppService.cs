@@ -67,6 +67,7 @@ namespace EP.Query.DataSource
 
     public class RenameInput
     {
+        [Range(1, int.MaxValue)]
         public int Id { get; set; }
         [Required]
         public string Name { get; set; }
@@ -93,6 +94,7 @@ namespace EP.Query.DataSource
 
     public class DeleteInput
     {
+        [Range(1, int.MaxValue)]
         public int Id { get; set; }
     }
 
@@ -100,6 +102,7 @@ namespace EP.Query.DataSource
 
     public class GetSchemasInput
     {
+        [Range(1, int.MaxValue)]
         public int Id { get; set; }
     }
 
@@ -122,13 +125,9 @@ namespace EP.Query.DataSource
 
     public class GetQueryDataInput : PagedResultRequestDto
     {
-        public GetQueryDataInput()
-        {
-            AndConditions = new List<string>();
-        }
         [Required]
         public string TableName { get; set; }
-        public List<string> AndConditions { get; set; }
+        public List<string> AndConditions { get; set; } = new List<string>();
 
     }
     public class GetQueryDataOutput : PagedResultDto<JObject>
@@ -137,13 +136,9 @@ namespace EP.Query.DataSource
     }
     public class GetQueryColumnsInput
     {
-        public GetQueryColumnsInput()
-        {
-            AndConditions = new List<string>();
-        }
         [Required]
         public string TableName { get; set; }
-        public List<string> AndConditions { get; set; }
+        public List<string> AndConditions { get; set; } = new List<string>();
     }
 
     public class GetQueryColumnsOutput

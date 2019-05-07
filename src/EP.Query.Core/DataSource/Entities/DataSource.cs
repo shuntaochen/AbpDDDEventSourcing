@@ -64,14 +64,13 @@ namespace EP.Query.DataSource
         public DateTime? LastModificationTime { get; set; }
 
 
-        public DataSource(string name, int folderId, DataSourceType dataSourceType, string sourceContent, string remark = null)
+        public DataSource(string name, int folderId, DataSourceType dataSourceType, string sourceContent, string remark = null) : this()
         {
             Name = name;
             DataSourceFolderId = folderId;
             Type = dataSourceType;
             SourceContent = sourceContent;
             Remark = remark;
-            DomainEvents.Add(new CreateDataSourceEventData(this));
         }
 
         public void Rename(string newName)

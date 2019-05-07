@@ -29,7 +29,7 @@
   <ItemGroup>
     <PackageReference Include="Abp" Version="4.3.0" />
     <PackageReference Include="Abp.EntityFrameworkCore" Version="4.3.0" />
-    <PackageReference Include="EP.Commons.Core" Version="1.1.23" />
+    <PackageReference Include="EP.Commons.Core" Version="1.1.25" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="2.2.1" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="2.2.1" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="2.2.1">
@@ -40,5 +40,10 @@
   </ItemGroup>
   <ItemGroup>
     <DotNetCliToolReference Include="Microsoft.EntityFrameworkCore.Tools.DotNet" Version="2.0.0" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.Extensions.Logging.Debug">
+      <HintPath>..\..\..\..\..\..\..\Program Files\dotnet\sdk\NuGetFallbackFolder\microsoft.extensions.logging.debug\2.2.0\lib\netstandard2.0\Microsoft.Extensions.Logging.Debug.dll</HintPath>
+    </Reference>
   </ItemGroup>
 </Project>
