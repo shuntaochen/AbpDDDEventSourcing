@@ -97,7 +97,7 @@ namespace EP.Query.DataSource
             MySqlDataReader reader = null;
             List<string> list_ColName = new List<string>();
             List<Type> list_ColType = new List<Type>();
-            string sql = "show columns from " + tableName + " ;";
+            string sql = "show columns from `" + tableName + "` ;";
             cmd = new MySqlCommand(sql, conn);
             try
             {
