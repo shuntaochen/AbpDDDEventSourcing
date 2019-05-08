@@ -32,11 +32,7 @@ namespace EP.Query.DataSource
             _dataSourceFieldRepository = dataSourceFieldRepository;
             _mysqlSchemaFactory = mysqlSchemaFactory;
         }
-        /// <summary>
-        /// 创建文件夹
-        /// </summary>
-        /// <param name="input"></param>
-        /// <returns></returns>
+        
         public async Task<CreateFolderOutput> CreateFolder(CreateFolderInput input)
         {
             var model = new DataSourceFolder(input.Name, input.ParentId);
@@ -44,11 +40,7 @@ namespace EP.Query.DataSource
         }
 
 
-        /// <summary>
-        /// 分页获取指定文件夹下数据源
-        /// </summary>
-        /// <param name="input"></param>
-        /// <returns></returns>
+        
         public async Task<GetALlOutput> GetALl(GetALlInput input)
         {
             var dss = _dataSourceRepository.GetAll().Where(ds => ds.DataSourceFolderId == input.FolderId);
@@ -62,22 +54,14 @@ namespace EP.Query.DataSource
             return ret;
         }
 
-        /// <summary>
-        /// 重命名数据源
-        /// </summary>
-        /// <param name="input"></param>
-        /// <returns></returns>
+        
         public async Task<RenameOutput> Rename(RenameInput input)
         {
             var model = await _dataSourceRepository.GetAsync(input.Id);
             model.Rename(input.Name);
             return new RenameOutput { Id = await _dataSourceRepository.InsertOrUpdateAndGetIdAsync(model) };
         }
-        /// <summary>
-        /// 添加或修改数据源
-        /// </summary>
-        /// <param name="input"></param>
-        /// <returns></returns>
+        
         public virtual async Task<SaveOutput> Save(SaveInput input)
         {
             input.DataSource.DataSourceFields.ForEach(f =>
@@ -91,21 +75,14 @@ namespace EP.Query.DataSource
             return new SaveOutput { Id = id };
 
         }
-        /// <summary>
-        /// 删除数据源
-        /// </summary>
-        /// <param name="input"></param>
-        /// <returns></returns>
+        
         [UnitOfWork]
         public virtual async Task Delete(DeleteInput input)
         {
             await _dataSourceRepository.DeleteAsync(del => del.Id == input.Id);
         }
 
-        /// <summary>
-        /// 获取数据库表架构和字段
-        /// </summary>
-        /// <returns></returns>
+       
         public async Task<GetSchemasOutput> GetSchemas()
         {
             JArray ret = new JArray();
@@ -119,11 +96,7 @@ namespace EP.Query.DataSource
 
             return new GetSchemasOutput { FieldInfos = ret };
         }
-        /// <summary>
-        /// 获取数据源和字段
-        /// </summary>
-        /// <param name="id"></param>
-        /// <returns></returns>
+        
         public async Task<DataSourceDto> Get(int id)
         {
             var model = _dataSourceRepository.GetAllIncluding(ds => ds.DataSourceFields).First(d => d.Id == id);
@@ -134,11 +107,7 @@ namespace EP.Query.DataSource
 
         }
 
-        /// <summary>
-        /// 获取数据源查询数据
-        /// </summary>
-        /// <param name="input"></param>
-        /// <returns></returns>
+        
         public async Task<GetQueryDataOutput> GetQueryData(GetQueryDataInput input)
         {
             var builder = new QueryBuilder();
@@ -156,11 +125,7 @@ namespace EP.Query.DataSource
             return new GetQueryDataOutput { Items = ret.As<IReadOnlyList<JObject>>(), TotalCount = totalCount };
         }
 
-        /// <summary>
-        /// 根据查询生成字段定义
-        /// </summary>
-        /// <param name="input"></param>
-        /// <returns></returns>
+        
         public async Task<Dictionary<string, string>> GetQueryColumns(GetQueryColumnsInput input)
         {
             var builder = new QueryBuilder();
