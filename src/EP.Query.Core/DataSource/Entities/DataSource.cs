@@ -22,8 +22,9 @@ namespace EP.Query.DataSource
         /// 文件夹编号
         /// </summary>
         public int DataSourceFolderId { get; set; }
+        [JsonIgnore]
         public virtual DataSourceFolder DataSourceFolder { get; set; }
-
+        [JsonIgnore]
         public virtual List<DataSourceField> DataSourceFields { get; set; } = new List<DataSourceField>();
 
         /// <summary>

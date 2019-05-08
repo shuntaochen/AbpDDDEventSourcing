@@ -14,8 +14,8 @@ namespace EP.Query.DataSource.Profiles
             CreateMap<DataSource, DataSourceDto>();
             CreateMap<DataSourceDto, DataSource>();
 
-            CreateMap<DataSourceFolder, DataSourceFieldDto>();
-            CreateMap<DataSourceFieldDto, DataSourceFolder>();
+            CreateMap<DataSourceFolder, DataSourceFolderDto>();//.ForMember(src => src.DataSources, opt => opt.Ignore());
+            CreateMap<DataSourceFolderDto, DataSourceFolder>().ForMember(dest => dest.DomainEvents, opt => opt.Ignore());
 
             CreateMap<DataSourceField, DataSourceFieldDto>();
             CreateMap<DataSourceFieldDto, DataSourceField>();//.ForMember(s => s.DataSource, opt => opt.Ignore());

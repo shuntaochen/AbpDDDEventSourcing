@@ -92,7 +92,7 @@ namespace EP.Query.WebApi.Startup
                     if (File.Exists(xmlPath))
                     {
                         //... and tell Swagger to use those XML comments.
-                        options.IncludeXmlComments(xmlPath);
+                        options.IncludeXmlComments(xmlPath); 
                     }
                 });
                 options.DocInclusionPredicate((docName, description) => true);

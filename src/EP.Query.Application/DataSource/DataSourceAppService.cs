@@ -32,7 +32,7 @@ namespace EP.Query.DataSource
             _dataSourceFieldRepository = dataSourceFieldRepository;
             _mysqlSchemaFactory = mysqlSchemaFactory;
         }
-        
+
         public async Task<CreateFolderOutput> CreateFolder(CreateFolderInput input)
         {
             var model = new DataSourceFolder(input.Name, input.ParentId);
@@ -40,7 +40,7 @@ namespace EP.Query.DataSource
         }
 
 
-        
+
         public async Task<GetALlOutput> GetALl(GetALlInput input)
         {
             var dss = _dataSourceRepository.GetAll().Where(ds => ds.DataSourceFolderId == input.FolderId);
@@ -48,20 +48,20 @@ namespace EP.Query.DataSource
             var totalDs = await dss.CountAsync();
             var totalFolders = await folders.CountAsync();
             var ret = new GetALlOutput() { TotalCount = (totalDs + totalFolders) };
-            ret.Folders = folders.Skip(input.SkipCount).Take(input.MaxResultCount).ToList();
-            ret.Items = dss.Skip(input.SkipCount - (folders.Count() - ret.Folders.Count())).Take(input.MaxResultCount - ret.Folders.Count()).ToList();
+            ret.Folders = folders.Skip(input.SkipCount).Take(input.MaxResultCount).Select(ds => new DataSourceFolderDto { Id = ds.Id, Name = ds.Name, DataSourceCount = ds.DataSourceCount, CreationTime = ds.CreationTime, CreatorUserId = ds.CreatorUserId, LastModificationTime = ds.LastModificationTime, LastModifierUserId = ds.LastModifierUserId }).ToList();
+            ret.Items = dss.Skip(input.SkipCount - (folders.Count() - ret.Folders.Count())).Take(input.MaxResultCount - ret.Folders.Count()).Select(ds => new DataSourceDto { Id = ds.Id, Name = ds.Name, DataSourceFolderId = ds.DataSourceFolderId, LastModifierUserId = ds.LastModifierUserId, CreationTime = ds.CreationTime, CreatorUserId = ds.CreatorUserId }).ToList();
 
             return ret;
         }
 
-        
+
         public async Task<RenameOutput> Rename(RenameInput input)
         {
             var model = await _dataSourceRepository.GetAsync(input.Id);
             model.Rename(input.Name);
             return new RenameOutput { Id = await _dataSourceRepository.InsertOrUpdateAndGetIdAsync(model) };
         }
-        
+
         public virtual async Task<SaveOutput> Save(SaveInput input)
         {
             input.DataSource.DataSourceFields.ForEach(f =>
@@ -75,14 +75,14 @@ namespace EP.Query.DataSource
             return new SaveOutput { Id = id };
 
         }
-        
+
         [UnitOfWork]
         public virtual async Task Delete(DeleteInput input)
         {
             await _dataSourceRepository.DeleteAsync(del => del.Id == input.Id);
         }
 
-       
+
         public async Task<GetSchemasOutput> GetSchemas()
         {
             JArray ret = new JArray();
@@ -96,7 +96,7 @@ namespace EP.Query.DataSource
 
             return new GetSchemasOutput { FieldInfos = ret };
         }
-        
+
         public async Task<DataSourceDto> Get(int id)
         {
             var model = _dataSourceRepository.GetAllIncluding(ds => ds.DataSourceFields).First(d => d.Id == id);
@@ -107,7 +107,7 @@ namespace EP.Query.DataSource
 
         }
 
-        
+
         public async Task<GetQueryDataOutput> GetQueryData(GetQueryDataInput input)
         {
             var builder = new QueryBuilder();
@@ -125,7 +125,7 @@ namespace EP.Query.DataSource
             return new GetQueryDataOutput { Items = ret.As<IReadOnlyList<JObject>>(), TotalCount = totalCount };
         }
 
-        
+
         public async Task<Dictionary<string, string>> GetQueryColumns(GetQueryColumnsInput input)
         {
             var builder = new QueryBuilder();

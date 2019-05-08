@@ -95,9 +95,9 @@ namespace EP.Query.DataSource
         public int FolderId { get; set; }
     }
 
-    public class GetALlOutput : PagedResultDto<DataSource>
+    public class GetALlOutput : PagedResultDto<DataSourceDto>
     {
-        public List<DataSourceFolder> Folders { get; set; } = new List<DataSourceFolder>();
+        public List<DataSourceFolderDto> Folders { get; set; } = new List<DataSourceFolderDto>();
     }
 
 
