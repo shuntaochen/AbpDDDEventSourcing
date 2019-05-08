@@ -49,8 +49,7 @@ namespace EP.Query.DataSource
         /// 修改时间
         /// </summary>
         public DateTime? LastModificationTime { get; set; }
-        [JsonIgnore]
-        public virtual List<DataSource> DataSources { get; set; } = new List<DataSource>();
+        public virtual ICollection<DataSource> DataSources { get; set; } = new List<DataSource>();
 
 
 
