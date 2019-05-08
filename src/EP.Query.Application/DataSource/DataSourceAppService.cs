@@ -48,7 +48,7 @@ namespace EP.Query.DataSource
             var totalDs = await dss.CountAsync();
             var totalFolders = await folders.CountAsync();
             var ret = new GetALlOutput() { TotalCount = (totalDs + totalFolders) };
-            ret.Folders = folders.Skip(input.SkipCount).Take(input.MaxResultCount).ToList().MapTo<List<DataSourceFolderDto>>();
+            ret.Folders = folders.Skip(input.SkipCount).Take(input.MaxResultCount).ToList();
             ret.Items = dss.Skip(input.SkipCount - (folders.Count() - ret.Folders.Count())).Take(input.MaxResultCount - ret.Folders.Count()).ToList();
 
             return ret;

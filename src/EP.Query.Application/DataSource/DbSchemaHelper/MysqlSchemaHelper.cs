@@ -10,6 +10,7 @@ namespace EP.Query.DataSource
     {
         private readonly MySqlConnection conn;
 
+        private string[] IgnoredTableOrColumns = new string[] { };
         public MysqlSchemaHelper(MySqlConnection conn)
         {
             this.conn = conn;

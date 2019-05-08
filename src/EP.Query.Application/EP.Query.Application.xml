@@ -4,68 +4,6 @@
         <name>EP.Query.Application</name>
     </assembly>
     <members>
-        <member name="M:EP.Query.DataSource.DataSourceAppService.CreateFolder(EP.Query.DataSource.CreateFolderInput)">
-            <summary>
-            创建文件夹
-            </summary>
-            <param name="input"></param>
-            <returns></returns>
-        </member>
-        <member name="M:EP.Query.DataSource.DataSourceAppService.GetALl(EP.Query.DataSource.GetALlInput)">
-            <summary>
-            分页获取指定文件夹下数据源
-            </summary>
-            <param name="input"></param>
-            <returns></returns>
-        </member>
-        <member name="M:EP.Query.DataSource.DataSourceAppService.Rename(EP.Query.DataSource.RenameInput)">
-            <summary>
-            重命名数据源
-            </summary>
-            <param name="input"></param>
-            <returns></returns>
-        </member>
-        <member name="M:EP.Query.DataSource.DataSourceAppService.Save(EP.Query.DataSource.SaveInput)">
-            <summary>
-            添加或修改数据源
-            </summary>
-            <param name="input"></param>
-            <returns></returns>
-        </member>
-        <member name="M:EP.Query.DataSource.DataSourceAppService.Delete(EP.Query.DataSource.DeleteInput)">
-            <summary>
-            删除数据源
-            </summary>
-            <param name="input"></param>
-            <returns></returns>
-        </member>
-        <member name="M:EP.Query.DataSource.DataSourceAppService.GetSchemas">
-            <summary>
-            获取数据库表架构和字段
-            </summary>
-            <returns></returns>
-        </member>
-        <member name="M:EP.Query.DataSource.DataSourceAppService.Get(System.Int32)">
-            <summary>
-            获取数据源和字段
-            </summary>
-            <param name="id"></param>
-            <returns></returns>
-        </member>
-        <member name="M:EP.Query.DataSource.DataSourceAppService.GetQueryData(EP.Query.DataSource.GetQueryDataInput)">
-            <summary>
-            获取数据源查询数据
-            </summary>
-            <param name="input"></param>
-            <returns></returns>
-        </member>
-        <member name="M:EP.Query.DataSource.DataSourceAppService.GetQueryColumns(EP.Query.DataSource.GetQueryColumnsInput)">
-            <summary>
-            根据查询生成字段定义
-            </summary>
-            <param name="input"></param>
-            <returns></returns>
-        </member>
         <member name="M:EP.Query.DataSource.MysqlTypeConverter.ToSysPreDefined(System.String)">
             <summary>
             统一转换，将后端数据类型转换为前端可理解类型，包括数据库类型和c#编程语言类型
@@ -197,6 +135,68 @@
             <summary>
             修改时间
             </summary>
+        </member>
+        <member name="M:EP.Query.DataSource.IDataSourceAppService.CreateFolder(EP.Query.DataSource.CreateFolderInput)">
+            <summary>
+            创建文件夹
+            </summary>
+            <param name="input"></param>
+            <returns></returns>
+        </member>
+        <member name="M:EP.Query.DataSource.IDataSourceAppService.GetALl(EP.Query.DataSource.GetALlInput)">
+            <summary>
+            分页获取指定文件夹下数据源
+            </summary>
+            <param name="input"></param>
+            <returns></returns>
+        </member>
+        <member name="M:EP.Query.DataSource.IDataSourceAppService.Get(System.Int32)">
+            <summary>
+            获取数据源和字段
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:EP.Query.DataSource.IDataSourceAppService.Rename(EP.Query.DataSource.RenameInput)">
+            <summary>
+            重命名数据源
+            </summary>
+            <param name="input"></param>
+            <returns></returns>
+        </member>
+        <member name="M:EP.Query.DataSource.IDataSourceAppService.Save(EP.Query.DataSource.SaveInput)">
+            <summary>
+            添加或修改数据源
+            </summary>
+            <param name="input"></param>
+            <returns></returns>
+        </member>
+        <member name="M:EP.Query.DataSource.IDataSourceAppService.Delete(EP.Query.DataSource.DeleteInput)">
+            <summary>
+            删除数据源
+            </summary>
+            <param name="input"></param>
+            <returns></returns>
+        </member>
+        <member name="M:EP.Query.DataSource.IDataSourceAppService.GetSchemas">
+            <summary>
+            获取数据库表架构和字段
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:EP.Query.DataSource.IDataSourceAppService.GetQueryColumns(EP.Query.DataSource.GetQueryColumnsInput)">
+            <summary>
+            根据查询生成字段定义
+            </summary>
+            <param name="input"></param>
+            <returns></returns>
+        </member>
+        <member name="M:EP.Query.DataSource.IDataSourceAppService.GetQueryData(EP.Query.DataSource.GetQueryDataInput)">
+            <summary>
+            获取数据源查询数据
+            </summary>
+            <param name="input"></param>
+            <returns></returns>
         </member>
         <member name="F:EP.Query.QueryAppConsts.DefaultPassPhrase">
             <summary>
