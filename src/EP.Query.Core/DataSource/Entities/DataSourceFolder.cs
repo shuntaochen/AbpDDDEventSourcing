@@ -49,10 +49,12 @@ namespace EP.Query.DataSource
         /// 修改时间
         /// </summary>
         public DateTime? LastModificationTime { get; set; }
+        public virtual ICollection<DataSource> DataSources { get; set; } = new List<DataSource>();
 
-        public List<DataSource> DataSources { get; set; } = new List<DataSource>();
 
-        private DataSourceFolder()
+
+
+        public DataSourceFolder()
         {
 
         }

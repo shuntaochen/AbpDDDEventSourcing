@@ -5,17 +5,31 @@ using System.Linq;
 using System.Reflection;
 using EP.Query.DataSource;
 using Newtonsoft.Json.Linq;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Debug;
 
 namespace EP.Query.EntityFrameworkCore
 {
     public class QueryDbContext : AbpDbContext
     {
+
+        public static readonly LoggerFactory LoggerFactory =
+       new LoggerFactory(new[] { new DebugLoggerProvider((_, __) => true) });
+
+
+
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            base.OnConfiguring(optionsBuilder);
+            optionsBuilder.UseLoggerFactory(LoggerFactory);
+        }
+
+
         //Add DbSet properties for your entities...
 
         public QueryDbContext(DbContextOptions<QueryDbContext> options)
             : base(options)
         {
-
         }
 
         public DbSet<DataSource.DataSource> DataSources { get; set; }

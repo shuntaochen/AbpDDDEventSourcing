@@ -22,8 +22,9 @@ namespace EP.Query.DataSource
         /// 文件夹编号
         /// </summary>
         public int DataSourceFolderId { get; set; }
+        [JsonIgnore]
         public virtual DataSourceFolder DataSourceFolder { get; set; }
-
+        [JsonIgnore]
         public virtual List<DataSourceField> DataSourceFields { get; set; } = new List<DataSourceField>();
 
         /// <summary>
@@ -64,14 +65,13 @@ namespace EP.Query.DataSource
         public DateTime? LastModificationTime { get; set; }
 
 
-        public DataSource(string name, int folderId, DataSourceType dataSourceType, string sourceContent, string remark = null)
+        public DataSource(string name, int folderId, DataSourceType dataSourceType, string sourceContent, string remark = null) : this()
         {
             Name = name;
             DataSourceFolderId = folderId;
             Type = dataSourceType;
             SourceContent = sourceContent;
             Remark = remark;
-            DomainEvents.Add(new CreateDataSourceEventData(this));
         }
 
         public void Rename(string newName)

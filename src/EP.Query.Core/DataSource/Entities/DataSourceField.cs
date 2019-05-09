@@ -18,6 +18,7 @@ namespace EP.Query.DataSource
         /// </summary>
         public int DataSourceId { get; set; }
 
+        [JsonIgnore]
         public DataSource DataSource { get; set; }
         /// <summary>
         /// 名称

@@ -29,6 +29,7 @@ using EP.Commons.Core.Configuration;
 using Abp.AspNetCore;
 using Swashbuckle.AspNetCore.Swagger;
 using Abp.AspNetCore.SignalR.Hubs;
+using EP.Query.DataSource.Options;
 
 namespace EP.Query.WebApi.Startup
 {
@@ -36,9 +37,12 @@ namespace EP.Query.WebApi.Startup
     {
         private string _defaultCorsPolicyName = "localhost";
 
+        private const string QueryDBFilterSectionName = "SchemaFilters";
+
         private readonly IConfigurationRoot _appConfiguration;
 
         private readonly IConfigurationBuilder _appConfigurationBuilder;
+
 
         //private readonly IHostingEnvironment _env;
 
@@ -52,6 +56,8 @@ namespace EP.Query.WebApi.Startup
 
         public IServiceProvider ConfigureServices(IServiceCollection services)
         {
+            services.Configure<SchemaFiltersSection>(_appConfiguration.GetSection(QueryDBFilterSectionName));
+
             // MVC
             services.AddMvc(
                 options => options.Filters.Add(new CorsAuthorizationFilterFactory(_defaultCorsPolicyName))

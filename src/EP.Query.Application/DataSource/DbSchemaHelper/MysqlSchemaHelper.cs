@@ -3,16 +3,21 @@ using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using Microsoft.Extensions.Options;
+using EP.Query.DataSource.Options;
+using System.Linq;
 
 namespace EP.Query.DataSource
 {
     public class MysqlSchemaHelper : IDbSchemaHelper
     {
         private readonly MySqlConnection conn;
-
-        public MysqlSchemaHelper(MySqlConnection conn)
+        private readonly SchemaFiltersSection filterConfig;
+        private string[] IgnoredTableOrColumns = new string[] { };
+        public MysqlSchemaHelper(MySqlConnection conn, SchemaFiltersSection filterConfig)
         {
             this.conn = conn;
+            this.filterConfig = filterConfig;
             conn.Open();
         }
 
@@ -77,7 +82,9 @@ namespace EP.Query.DataSource
                     while (reader.Read())
                     {
                         string t = reader.GetString(0);
-                        list_tblName.Add(t);
+                        //only add tables not in config 
+                        if (!filterConfig.HiddenTables.Any(name => name == t))
+                            list_tblName.Add(t);
                     }
                 }
                 reader.Close();
@@ -97,7 +104,7 @@ namespace EP.Query.DataSource
             MySqlDataReader reader = null;
             List<string> list_ColName = new List<string>();
             List<Type> list_ColType = new List<Type>();
-            string sql = "show columns from " + tableName + " ;";
+            string sql = "show columns from `" + tableName + "` ;";
             cmd = new MySqlCommand(sql, conn);
             try
             {
@@ -110,7 +117,8 @@ namespace EP.Query.DataSource
                         Type tt = reader.GetValue(1) as Type;
 
                         string ttt = reader.GetString(1);
-                        fieldDef.Add(t, ttt.ToSysPreDefined());
+                        if (!filterConfig.HiddenColumns.Any(col => $"{tableName}.{t}".ToLower() == col.ToLower()))
+                            fieldDef.Add(t, ttt.ToSysPreDefined());
                     }
                 }
                 reader.Close();
