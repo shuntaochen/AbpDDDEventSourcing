@@ -21,6 +21,7 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Abp.AutoMapper" Version="4.3.0" />
+    <PackageReference Include="DevExpress.Xpo" Version="18.2.3" />
     <PackageReference Include="EP.Commons.CAP" Version="1.1.25" />
     <PackageReference Include="EP.Commons.ServiceApi" Version="1.1.25" />
   </ItemGroup>
@@ -37,5 +38,11 @@
   
   <ItemGroup>
     <Service Include="{508349b6-6b84-4df5-91f0-309beebad82d}" />
+  </ItemGroup>
+  
+  <ItemGroup>
+    <Compile Update="DataSource\Options\SchemaFiltersSection.cs">
+      <SubType>Code</SubType>
+    </Compile>
   </ItemGroup>
 </Project>

@@ -20,6 +20,13 @@ namespace EP.Query.DataSource
         Task<CreateFolderOutput> CreateFolder(CreateFolderInput input);
 
         /// <summary>
+        /// 刪除空文件夾
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        Task DeleteFolder(int id);
+
+        /// <summary>
         /// 分页获取指定文件夹下数据源
         /// </summary>
         /// <param name="input"></param>

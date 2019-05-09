@@ -5,6 +5,7 @@ using Abp.Domain.Repositories;
 using Abp.Domain.Uow;
 using Abp.Events.Bus;
 using Abp.Extensions;
+using Abp.UI;
 using EP.Query.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using MySql.Data.MySqlClient;
@@ -142,5 +143,10 @@ namespace EP.Query.DataSource
             return cols;
         }
 
+        public async Task DeleteFolder(int id)
+        {
+            if (_dataSourceRepository.GetAll().Any(ds => ds.DataSourceFolderId == id) || _dataSourceFolderRepository.GetAll().Any(df => df.ParentId == id)) throw new UserFriendlyException(L("DataSourceFolderHasContent"));
+            await _dataSourceFolderRepository.DeleteAsync(id);
+        }
     }
 }

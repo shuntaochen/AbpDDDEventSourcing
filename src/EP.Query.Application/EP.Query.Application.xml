@@ -143,6 +143,13 @@
             <param name="input"></param>
             <returns></returns>
         </member>
+        <member name="M:EP.Query.DataSource.IDataSourceAppService.DeleteFolder(System.Int32)">
+            <summary>
+            刪除空文件夾
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
         <member name="M:EP.Query.DataSource.IDataSourceAppService.GetALl(EP.Query.DataSource.GetALlInput)">
             <summary>
             分页获取指定文件夹下数据源
