@@ -14,7 +14,7 @@ namespace EP.Query.EntityFrameworkCore
     {
 
         public static readonly LoggerFactory LoggerFactory =
-       new LoggerFactory(new[] { new DebugLoggerProvider((_, __) => true) });
+new LoggerFactory(new[] { new DebugLoggerProvider() }, new LoggerFilterOptions().AddFilter((_, __) => true));
 
 
 

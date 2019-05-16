@@ -22,8 +22,8 @@
   <ItemGroup>
     <PackageReference Include="Abp.AutoMapper" Version="4.3.0" />
     <PackageReference Include="DevExpress.Xpo" Version="18.2.3" />
-    <PackageReference Include="EP.Commons.CAP" Version="1.1.25" />
-    <PackageReference Include="EP.Commons.ServiceApi" Version="1.1.25" />
+    <PackageReference Include="EP.Commons.CAP" Version="1.1.26" />
+    <PackageReference Include="EP.Commons.ServiceApi" Version="1.1.26" />
   </ItemGroup>
   
   <ItemGroup>
