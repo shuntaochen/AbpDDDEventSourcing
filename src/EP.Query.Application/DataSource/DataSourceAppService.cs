@@ -15,6 +15,9 @@ using System.Data.Common;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using EP.Commons.ServiceApi.DynamicForms.Dto;
+using EP.Commons.ServiceApi.DynamicForms;
+using EP.Commons.ServiceApi;
 
 namespace EP.Query.DataSource
 {
@@ -25,13 +28,15 @@ namespace EP.Query.DataSource
         private readonly IRepository<DataSourceField> _dataSourceFieldRepository;
         private readonly DbSchemaFactory _mysqlSchemaFactory;
 
+        private readonly IDynamicFormsServiceApi dynamicFormsServiceApi;
 
-        public DataSourceAppService(IRepository<DataSourceFolder> dataSourceFolderRepository, IRepository<DataSource> dataSourceRepository, IRepository<DataSourceField> dataSourceFieldRepository, DbSchemaFactory mysqlSchemaFactory) : base()
+        public DataSourceAppService(IRepository<DataSourceFolder> dataSourceFolderRepository, IRepository<DataSource> dataSourceRepository, IRepository<DataSourceField> dataSourceFieldRepository, DbSchemaFactory mysqlSchemaFactory, IServiceApiFactory serviceApiFactory) : base()
         {
             _dataSourceFolderRepository = dataSourceFolderRepository;
             _dataSourceRepository = dataSourceRepository;
             _dataSourceFieldRepository = dataSourceFieldRepository;
             _mysqlSchemaFactory = mysqlSchemaFactory;
+            dynamicFormsServiceApi = serviceApiFactory.GetServiceApi<IDynamicFormsServiceApi>().Object;
         }
 
         public async Task<CreateFolderOutput> CreateFolder(CreateFolderInput input)
@@ -109,6 +114,46 @@ namespace EP.Query.DataSource
         }
 
 
+
+
+
+        public async Task<GetQueryDataOutput> GetQueryData(int id, bool queryAll = false, int skipCount = 0, int maxResultCount = int.MaxValue)
+        {
+            var ret = new GetQueryDataOutput();
+            var ds = await _dataSourceRepository.GetAsync(id);
+            var input = new GetQueryDataInput
+            {
+                SkipCount = skipCount,
+                MaxResultCount = maxResultCount,
+                TableName = ds.SourceContent,
+                AndConditions = _dataSourceFieldRepository.GetAllList(df => df.DataSourceId == id).Select(f => f.Filter).ToList()
+            };
+
+            var input1 = new GetFormDataInput()
+            {
+                SkipCount = skipCount,
+                MaxResultCount = maxResultCount,
+                Paths = input.AndConditions,
+                RetPaths = null
+
+            };
+
+            switch (ds.Type)
+            {
+                case DataSourceType.Form:
+                    var obj = await dynamicFormsServiceApi.GetAllFormData(input1);
+                    ret.TotalCount = int.Parse(obj["totalCount"]?.ToString());
+                    ret.Items = obj["items"]?.As<IReadOnlyList<JObject>>();
+                    break;
+                case DataSourceType.TableOrView:
+                case DataSourceType.Sql:
+                    ret = await GetQueryData(input);
+                    break;
+                default:
+                    break;
+            }
+            return ret;
+        }
         public async Task<GetQueryDataOutput> GetQueryData(GetQueryDataInput input)
         {
             var builder = new QueryBuilder();
