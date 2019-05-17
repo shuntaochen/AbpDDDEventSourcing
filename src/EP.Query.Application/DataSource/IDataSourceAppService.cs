@@ -73,11 +73,21 @@ namespace EP.Query.DataSource
         /// <returns></returns>
         Task<Dictionary<string, string>> GetQueryColumns(GetQueryColumnsInput input);
         /// <summary>
-        /// 获取数据源查询数据
+        /// 获取数据源预览数据
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
-        Task<GetQueryDataOutput> GetQueryData(GetQueryDataInput input);
+        Task<GetQueryDataOutput> GetPreviewData(GetQueryDataInput input);
+
+        /// <summary>
+        /// 查询数据
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="queryAll"></param>
+        /// <param name="skipCount"></param>
+        /// <param name="maxResultCount"></param>
+        /// <returns></returns>
+        Task<GetQueryDataOutput> GetQueryData(int id, bool queryAll = false, int skipCount = 0, int maxResultCount = int.MaxValue);
 
 
     }

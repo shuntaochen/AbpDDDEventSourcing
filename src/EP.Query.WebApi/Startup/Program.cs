@@ -17,8 +17,11 @@ namespace EP.Query.WebApi.Startup
 {
     public class Program
     {
+
         public static void Main(string[] args)
         {
+            IReadOnlyList<JObject> x = new List<JObject>();
+            
             BuildWebHost(args).Run();
         }
 

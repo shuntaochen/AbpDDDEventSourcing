@@ -107,9 +107,8 @@ namespace EP.Query.DataSource
         {
             var model = _dataSourceRepository.GetAllIncluding(ds => ds.DataSourceFields).First(d => d.Id == id);
 
-            var ret = model.MapTo<DataSourceDto>();
+            var ret = model.MapTo<DataSourceDto>(); return ret;
 
-            return ret;
 
         }
 
@@ -117,24 +116,19 @@ namespace EP.Query.DataSource
 
 
 
-        public async Task<GetQueryDataOutput> GetQueryData(int id, bool queryAll = false, int skipCount = 0, int maxResultCount = int.MaxValue)
+        public async Task<GetQueryDataOutput> GetQueryData(int id, bool queryAll = true, int skipCount = 0, int maxResultCount = int.MaxValue)
         {
             var ret = new GetQueryDataOutput();
             var ds = await _dataSourceRepository.GetAsync(id);
-            var input = new GetQueryDataInput
-            {
-                SkipCount = skipCount,
-                MaxResultCount = maxResultCount,
-                TableName = ds.SourceContent,
-                AndConditions = _dataSourceFieldRepository.GetAllList(df => df.DataSourceId == id).Select(f => f.Filter).ToList()
-            };
+            var paths = _dataSourceFieldRepository.GetAll().Where(df => df.DataSourceId == id && !string.IsNullOrEmpty(df.Filter)).AsNoTracking().Select(f => f.Filter).ToList();
 
             var input1 = new GetFormDataInput()
             {
                 SkipCount = skipCount,
                 MaxResultCount = maxResultCount,
-                Paths = input.AndConditions,
-                RetPaths = null
+                Paths = paths,
+                RetPaths = new List<string>(),
+                QueryAll = queryAll
 
             };
 
@@ -143,18 +137,25 @@ namespace EP.Query.DataSource
                 case DataSourceType.Form:
                     var obj = await dynamicFormsServiceApi.GetAllFormData(input1);
                     ret.TotalCount = int.Parse(obj["totalCount"]?.ToString());
-                    ret.Items = obj["items"]?.As<IReadOnlyList<JObject>>();
+                    ret.Items = obj["items"]?.ToObject<IReadOnlyList<JObject>>();
                     break;
                 case DataSourceType.TableOrView:
                 case DataSourceType.Sql:
-                    ret = await GetQueryData(input);
+                    var input = new GetQueryDataInput
+                    {
+                        SkipCount = skipCount,
+                        MaxResultCount = maxResultCount,
+                        TableName = ds.SourceContent,
+                        AndConditions = paths
+                    };
+                    ret = await GetPreviewData(input);
                     break;
                 default:
                     break;
             }
             return ret;
         }
-        public async Task<GetQueryDataOutput> GetQueryData(GetQueryDataInput input)
+        public async Task<GetQueryDataOutput> GetPreviewData(GetQueryDataInput input)
         {
             var builder = new QueryBuilder();
             builder.AddTableName(input.TableName);
@@ -168,6 +169,7 @@ namespace EP.Query.DataSource
                 Dictionary<string, string> cols = new Dictionary<string, string>();
                 ret = mysql.Query(sql, out cols, out totalCount, (input.SkipCount / input.MaxResultCount + 1), input.MaxResultCount);
             }
+
             return new GetQueryDataOutput { Items = ret.As<IReadOnlyList<JObject>>(), TotalCount = totalCount };
         }
 
