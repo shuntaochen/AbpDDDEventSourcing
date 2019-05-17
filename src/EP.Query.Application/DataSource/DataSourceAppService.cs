@@ -18,24 +18,27 @@ using System.Threading.Tasks;
 using EP.Commons.ServiceApi.DynamicForms.Dto;
 using EP.Commons.ServiceApi.DynamicForms;
 using EP.Commons.ServiceApi;
+using Abp.Runtime.Caching;
 
 namespace EP.Query.DataSource
 {
     public class DataSourceAppService : QueryAppServiceBase, IDataSourceAppService
     {
+        public const string DB_SCHEMA_CACHENAME = "#EP.Query.DataSource.DataSourceAppService.DB_SCHEMA_CACHENAME#";
         private readonly IRepository<DataSourceFolder> _dataSourceFolderRepository;
         private readonly IRepository<DataSource> _dataSourceRepository;
         private readonly IRepository<DataSourceField> _dataSourceFieldRepository;
         private readonly DbSchemaFactory _mysqlSchemaFactory;
-
+        private readonly ICacheManager cacheManager;
         private readonly IDynamicFormsServiceApi dynamicFormsServiceApi;
 
-        public DataSourceAppService(IRepository<DataSourceFolder> dataSourceFolderRepository, IRepository<DataSource> dataSourceRepository, IRepository<DataSourceField> dataSourceFieldRepository, DbSchemaFactory mysqlSchemaFactory, IServiceApiFactory serviceApiFactory) : base()
+        public DataSourceAppService(IRepository<DataSourceFolder> dataSourceFolderRepository, IRepository<DataSource> dataSourceRepository, IRepository<DataSourceField> dataSourceFieldRepository, DbSchemaFactory mysqlSchemaFactory, IServiceApiFactory serviceApiFactory, ICacheManager cacheManager) : base()
         {
             _dataSourceFolderRepository = dataSourceFolderRepository;
             _dataSourceRepository = dataSourceRepository;
             _dataSourceFieldRepository = dataSourceFieldRepository;
             _mysqlSchemaFactory = mysqlSchemaFactory;
+            this.cacheManager = cacheManager;
             dynamicFormsServiceApi = serviceApiFactory.GetServiceApi<IDynamicFormsServiceApi>().Object;
         }
 
@@ -109,16 +112,19 @@ namespace EP.Query.DataSource
 
         public async Task<GetSchemasOutput> GetSchemas()
         {
-            JArray ret = new JArray();
-            using (var mysql = _mysqlSchemaFactory.Create())
+            var cached = cacheManager.GetCache(DB_SCHEMA_CACHENAME).Get(DB_SCHEMA_CACHENAME, () =>
             {
-                var tables = mysql.GetTableNames();
-                var tableWithColumns = tables.Select(name => new { name, fields = mysql.GetTableColumnDefinitions(name) }).ToList();
-                ret = JArray.FromObject(tableWithColumns);
-            }
+                JArray ret = new JArray();
+                using (var mysql = _mysqlSchemaFactory.Create())
+                {
+                    var tables = mysql.GetTableNames();
+                    var tableWithColumns = tables.Select(name => new { name, fields = mysql.GetTableColumnDefinitions(name) }).ToList();
+                    ret = JArray.FromObject(tableWithColumns);
+                }
 
-
-            return new GetSchemasOutput { FieldInfos = ret };
+                return new GetSchemasOutput { FieldInfos = ret };
+            });
+            return cached;
         }
 
         public async Task<DataSourceDto> Get(int id)
