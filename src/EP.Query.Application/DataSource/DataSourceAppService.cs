@@ -64,7 +64,8 @@ namespace EP.Query.DataSource
                 LastModificationTime = ds.LastModificationTime,
                 LastModifierUserId = ds.LastModifierUserId
             }).ToList();
-            ret.Items = dss.Skip(input.SkipCount - (folders.Count() - ret.Folders.Count())).Take(input.MaxResultCount - ret.Folders.Count()).Select(ds => new DataSourceDto
+            var num1 = input.SkipCount - (folders.Count() - ret.Folders.Count());
+            ret.Items = dss.Skip(num1 > 0 ? num1 : 0).Take(input.MaxResultCount - ret.Folders.Count()).Select(ds => new DataSourceDto
             {
                 Id = ds.Id,
                 Name = ds.Name,
