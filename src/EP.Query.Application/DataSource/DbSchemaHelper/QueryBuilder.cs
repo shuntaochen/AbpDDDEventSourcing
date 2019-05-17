@@ -28,7 +28,7 @@ namespace EP.Query.DataSource
 
         private string Select(string selected)
         {
-            return $"select {selected} from {_tableName} where 1=1 { (_conditions.Count > 0 ? "and" : "") }{string.Join(" and ", _conditions.Select(c => c.Contains('=') ? $"{c.Split('=')[0]}='{c.Split('=')[1]}'" : c))}";
+            return $"select {selected} from {_tableName} where 1=1 { (_conditions.Count > 0 ? "and " : "") }{string.Join(" and ", _conditions.Select(c => c.Contains('=') ? $"{c.Split('=')[0]}='{c.Split('=')[1]}'" : c))}";
         }
 
         public void AddAndConditions(List<string> andConditions)

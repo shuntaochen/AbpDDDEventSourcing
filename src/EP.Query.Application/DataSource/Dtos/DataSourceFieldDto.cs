@@ -3,6 +3,7 @@ using Abp.Domain.Entities;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
 
@@ -30,6 +31,7 @@ namespace EP.Query.DataSource
         /// <summary>
         /// 过滤条件
         /// </summary>
+        [RegularExpression(@"^.+[><=!]+\w+$")]
         public string Filter { get; set; }
         /// <summary>
         /// 租户id

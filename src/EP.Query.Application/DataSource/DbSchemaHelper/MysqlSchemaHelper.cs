@@ -118,7 +118,7 @@ namespace EP.Query.DataSource
 
                         string ttt = reader.GetString(1);
                         if (!filterConfig.HiddenColumns.Any(col => $"{tableName}.{t}".ToLower() == col.ToLower()))
-                            fieldDef.Add(t, ttt.ToSysPreDefined());
+                            fieldDef.Add(t, ttt.ToSysPreDefined()); 
                     }
                 }
                 reader.Close();

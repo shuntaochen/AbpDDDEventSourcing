@@ -59,6 +59,7 @@ namespace EP.Query.DataSource
 
         [JsonIgnore]
         public DataSourceFolderDto DataSourceFolder { get; set; }
+
         public List<DataSourceFieldDto> DataSourceFields { get; set; } = new List<DataSourceFieldDto>();
 
     }
