@@ -54,8 +54,25 @@ namespace EP.Query.DataSource
             var totalDs = await dss.CountAsync();
             var totalFolders = await folders.CountAsync();
             var ret = new GetALlOutput() { TotalCount = (totalDs + totalFolders) };
-            ret.Folders = folders.Skip(input.SkipCount).Take(input.MaxResultCount).Select(ds => new DataSourceFolderDto { Id = ds.Id, Name = ds.Name, DataSourceCount = ds.DataSourceCount, CreationTime = ds.CreationTime, CreatorUserId = ds.CreatorUserId, LastModificationTime = ds.LastModificationTime, LastModifierUserId = ds.LastModifierUserId }).ToList();
-            ret.Items = dss.Skip(input.SkipCount - (folders.Count() - ret.Folders.Count())).Take(input.MaxResultCount - ret.Folders.Count()).Select(ds => new DataSourceDto { Id = ds.Id, Name = ds.Name, DataSourceFolderId = ds.DataSourceFolderId, LastModifierUserId = ds.LastModifierUserId, CreationTime = ds.CreationTime, CreatorUserId = ds.CreatorUserId }).ToList();
+            ret.Folders = folders.Skip(input.SkipCount).Take(input.MaxResultCount).Select(ds => new DataSourceFolderDto
+            {
+                Id = ds.Id,
+                Name = ds.Name,
+                DataSourceCount = ds.DataSourceCount,
+                CreationTime = ds.CreationTime,
+                CreatorUserId = ds.CreatorUserId,
+                LastModificationTime = ds.LastModificationTime,
+                LastModifierUserId = ds.LastModifierUserId
+            }).ToList();
+            ret.Items = dss.Skip(input.SkipCount - (folders.Count() - ret.Folders.Count())).Take(input.MaxResultCount - ret.Folders.Count()).Select(ds => new DataSourceDto
+            {
+                Id = ds.Id,
+                Name = ds.Name,
+                DataSourceFolderId = ds.DataSourceFolderId,
+                LastModifierUserId = ds.LastModifierUserId,
+                CreationTime = ds.CreationTime,
+                CreatorUserId = ds.CreatorUserId
+            }).ToList();
 
             return ret;
         }
