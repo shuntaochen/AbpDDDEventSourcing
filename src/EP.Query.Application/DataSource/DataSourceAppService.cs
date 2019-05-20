@@ -91,7 +91,7 @@ namespace EP.Query.DataSource
 
         public virtual async Task<SaveOutput> Save(SaveInput input)
         {
-            //if (_dataSourceRepository.GetAll().Any(ds => ds.Name == input.Name)) throw new UserFriendlyException(L("DataSourceNameAlreadyExist"));
+            //if (_dataSourceRepository.GetAll().Any(ds => ds.Name == input.Name)) throw new UserFriendlyException(L("DataSourceNameAlreadyExists"));
             var dto = new DataSourceDto
             {
                 DataSourceFolderId = input.DataSourceFolderId,
@@ -126,16 +126,23 @@ namespace EP.Query.DataSource
         }
 
 
-        public async Task<GetSchemasOutput> GetSchemas()
+        public async Task<GetSchemasOutput> GetSchemas(DataSourceType dataSourceType)
         {
             var cached = cacheManager.GetCache(DB_SCHEMA_CACHENAME).Get(DB_SCHEMA_CACHENAME, () =>
             {
                 JArray ret = new JArray();
-                using (var mysql = _mysqlSchemaFactory.Create())
+                if (dataSourceType == DataSourceType.Form)
                 {
-                    var tables = mysql.GetTableNames();
-                    var tableWithColumns = tables.Select(name => new { name, fields = mysql.GetTableColumnDefinitions(name) }).ToList();
-                    ret = JArray.FromObject(tableWithColumns);
+
+                }
+                else
+                {
+                    using (var mysql = _mysqlSchemaFactory.Create())
+                    {
+                        var tables = mysql.GetTableNames();
+                        var tableWithColumns = tables.Select(name => new { name, fields = mysql.GetTableColumnDefinitions(name) }).ToList();
+                        ret = JArray.FromObject(tableWithColumns);
+                    }
                 }
 
                 return new GetSchemasOutput { FieldInfos = ret };

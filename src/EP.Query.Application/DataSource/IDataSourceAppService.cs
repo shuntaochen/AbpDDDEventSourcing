@@ -65,7 +65,7 @@ namespace EP.Query.DataSource
         /// 获取数据库表架构和字段
         /// </summary>
         /// <returns></returns>
-        Task<GetSchemasOutput> GetSchemas();
+        Task<GetSchemasOutput> GetSchemas(DataSourceType dataSourceType);
         /// <summary>
         /// 根据查询生成字段定义
         /// </summary>
