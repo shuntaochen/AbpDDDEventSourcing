@@ -91,11 +91,27 @@ namespace EP.Query.DataSource
 
         public virtual async Task<SaveOutput> Save(SaveInput input)
         {
-            input.DataSource.DataSourceFields.ForEach(f =>
+            //if (_dataSourceRepository.GetAll().Any(ds => ds.Name == input.Name)) throw new UserFriendlyException(L("DataSourceNameAlreadyExists"));
+            var dto = new DataSourceDto
             {
-                if (f.DisplayText.IsNullOrEmpty()) f.DisplayText = f.Name;
-            });
-            var model = ObjectMapper.Map<DataSource>(input.DataSource);
+                DataSourceFolderId = input.DataSourceFolderId,
+                Name = input.Name,
+                Remark = input.Remark,
+                SourceContent = input.SourceContent,
+                Id = input.Id.HasValue ? input.Id.Value : 0
+
+            };
+            dto.DataSourceFields = input.DataSourceFields.Select(f =>
+              new DataSourceFieldDto
+              {
+                  Type = f.Type,
+                  DataSourceId = dto.Id,
+                  Filter = f.Filter,
+                  Name = f.Name,
+                  DisplayText = !string.IsNullOrEmpty(f.DisplayText) ? f.DisplayText : f.Name,
+
+              }).ToList();
+            var model = ObjectMapper.Map<DataSource>(dto);
             var id = await _dataSourceRepository.InsertOrUpdateAndGetIdAsync(model);
             _dataSourceFieldRepository.Delete(df => df.DataSourceId == id);
             model.DataSourceFields.ForEach(dfo => _dataSourceFieldRepository.InsertOrUpdate(dfo.MapTo<DataSourceField>()));
@@ -110,16 +126,23 @@ namespace EP.Query.DataSource
         }
 
 
-        public async Task<GetSchemasOutput> GetSchemas()
+        public async Task<GetSchemasOutput> GetSchemas(DataSourceType dataSourceType)
         {
             var cached = cacheManager.GetCache(DB_SCHEMA_CACHENAME).Get(DB_SCHEMA_CACHENAME, () =>
             {
                 JArray ret = new JArray();
-                using (var mysql = _mysqlSchemaFactory.Create())
+                if (dataSourceType == DataSourceType.Form)
                 {
-                    var tables = mysql.GetTableNames();
-                    var tableWithColumns = tables.Select(name => new { name, fields = mysql.GetTableColumnDefinitions(name) }).ToList();
-                    ret = JArray.FromObject(tableWithColumns);
+
+                }
+                else
+                {
+                    using (var mysql = _mysqlSchemaFactory.Create())
+                    {
+                        var tables = mysql.GetTableNames();
+                        var tableWithColumns = tables.Select(name => new { name, fields = mysql.GetTableColumnDefinitions(name) }).ToList();
+                        ret = JArray.FromObject(tableWithColumns);
+                    }
                 }
 
                 return new GetSchemasOutput { FieldInfos = ret };
@@ -135,8 +158,6 @@ namespace EP.Query.DataSource
 
 
         }
-
-
 
 
 
@@ -187,7 +208,6 @@ namespace EP.Query.DataSource
             var sql = builder.Build;
             int totalCount = 0;
             var ret = new List<JObject>();
-            //sql = "select * from datasouces";
             using (var mysql = _mysqlSchemaFactory.Create())
             {
                 Dictionary<string, string> cols = new Dictionary<string, string>();
@@ -200,16 +220,11 @@ namespace EP.Query.DataSource
 
         public async Task<Dictionary<string, string>> GetQueryColumns(GetQueryColumnsInput input)
         {
-            var builder = new QueryBuilder();
-            builder.AddTableName(input.TableName);
-            builder.AddAndConditions(input.AndConditions);
-            var (total, totalCount) = builder.Build;
 
             Dictionary<string, string> cols = new Dictionary<string, string>();
-            //sql = "select * from datasouces";
             using (var mysql = _mysqlSchemaFactory.Create())
             {
-                var data = mysql.Query((total, totalCount), out cols, out var count, 1, 1);
+                var data = mysql.Query((input.Sql, ""), out cols, out var count, 1, 1);
             }
             return cols;
         }

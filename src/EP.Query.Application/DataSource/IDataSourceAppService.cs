@@ -65,7 +65,7 @@ namespace EP.Query.DataSource
         /// 获取数据库表架构和字段
         /// </summary>
         /// <returns></returns>
-        Task<GetSchemasOutput> GetSchemas();
+        Task<GetSchemasOutput> GetSchemas(DataSourceType dataSourceType);
         /// <summary>
         /// 根据查询生成字段定义
         /// </summary>
@@ -135,10 +135,60 @@ namespace EP.Query.DataSource
 
     public class SaveInput
     {
-        public DataSourceDto DataSource { get; set; } = new DataSourceDto();
+        /// <summary>
+        /// 文件夹编号
+        /// </summary>
+        [Range(1, int.MaxValue)]
+        [Required]
+        public int DataSourceFolderId { get; set; }
+
+        /// <summary>
+        /// 名称
+        /// </summary>
+        [Required]
+        public string Name { get; set; }
+        /// <summary>
+        /// 类型
+        /// </summary>
+        public DataSourceType Type { get; set; }
+        /// <summary>
+        /// 数据源总个数
+        /// </summary>
+        public string SourceContent { get; set; }
+        /// <summary>
+        /// 备注
+        /// </summary>
+        public string Remark { get; set; }
+
+        public int? Id { get; set; }
+
+        public List<DataSourceFieldInput> DataSourceFields { get; set; }
 
 
     }
+
+    public class DataSourceFieldInput
+    {
+
+        /// <summary>
+        /// 名称
+        /// </summary>
+        public string Name { get; set; }
+        /// <summary>
+        /// 类型
+        /// </summary>
+        public string Type { get; set; }
+        /// <summary>
+        /// 显示名称
+        /// </summary>
+        public string DisplayText { get; set; }
+        /// <summary>
+        /// 过滤条件
+        /// </summary>
+        [RegularExpression(@"^.+[><=!]+\w+$")]
+        public string Filter { get; set; }
+    }
+
 
     public class SaveOutput
     {
@@ -190,9 +240,7 @@ namespace EP.Query.DataSource
     }
     public class GetQueryColumnsInput
     {
-        [Required]
-        public string TableName { get; set; }
-        public List<string> AndConditions { get; set; } = new List<string>();
+        public string Sql { get; set; }
     }
 
     public class GetQueryColumnsOutput
