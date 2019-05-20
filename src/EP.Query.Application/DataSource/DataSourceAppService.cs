@@ -97,7 +97,9 @@ namespace EP.Query.DataSource
                 DataSourceFolderId = input.DataSourceFolderId,
                 Name = input.Name,
                 Remark = input.Remark,
-                SourceContent = input.SourceContent
+                SourceContent = input.SourceContent,
+                Id = input.Id.HasValue ? input.Id.Value : 0
+
             };
             dto.DataSourceFields = input.DataSourceFields.Select(f =>
               new DataSourceFieldDto

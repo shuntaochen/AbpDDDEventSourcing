@@ -31,7 +31,7 @@ namespace EP.Query.DataSource
         /// <summary>
         /// 过滤条件
         /// </summary>
-        [RegularExpression(@"^.+[><=!]+\w+$")]
+        //[RegularExpression(@"^.+[><=!]+\w+$")]
         public string Filter { get; set; }
         /// <summary>
         /// 租户id
