@@ -21,12 +21,15 @@ namespace EP.Query.DataSource
             conn.Open();
         }
 
+
+
+
         public List<JObject> Query((string total, string totalCount) queryText, out Dictionary<string, string> columnDefinitions, out int totalCount, int pageIndex = 1, int pageSize = int.MaxValue)
         {
             var ret = new List<JObject>();
             columnDefinitions = new Dictionary<string, string>();
             totalCount = 0;
-            MySqlCommand cmd = new MySqlCommand($"{queryText.total} limit {(pageIndex - 1) * pageSize},{pageSize}", conn);
+            MySqlCommand cmd = new MySqlCommand(!queryText.total.ToLower().Contains("limit") ? $"{queryText.total} limit {(pageIndex - 1) * pageSize},{pageSize}" : queryText.total, conn);
             MySqlDataReader reader = null;
             try
             {
@@ -46,8 +49,11 @@ namespace EP.Query.DataSource
                     }
                 }
                 reader.Close();
-                var cmd1 = new MySqlCommand(queryText.totalCount, conn);
-                totalCount = int.Parse(cmd1.ExecuteScalar().ToString());
+                if (!string.IsNullOrEmpty(queryText.totalCount))
+                {
+                    var cmd1 = new MySqlCommand(queryText.totalCount, conn);
+                    totalCount = int.Parse(cmd1.ExecuteScalar().ToString());
+                }
 
             }
             catch (Exception e)
@@ -118,7 +124,7 @@ namespace EP.Query.DataSource
 
                         string ttt = reader.GetString(1);
                         if (!filterConfig.HiddenColumns.Any(col => $"{tableName}.{t}".ToLower() == col.ToLower()))
-                            fieldDef.Add(t, ttt.ToSysPreDefined()); 
+                            fieldDef.Add(t, ttt.ToSysPreDefined());
                     }
                 }
                 reader.Close();

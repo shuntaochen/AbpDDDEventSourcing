@@ -91,11 +91,25 @@ namespace EP.Query.DataSource
 
         public virtual async Task<SaveOutput> Save(SaveInput input)
         {
-            input.DataSource.DataSourceFields.ForEach(f =>
+            //if (_dataSourceRepository.GetAll().Any(ds => ds.Name == input.Name)) throw new UserFriendlyException(L("DataSourceNameAlreadyExist"));
+            var dto = new DataSourceDto
             {
-                if (f.DisplayText.IsNullOrEmpty()) f.DisplayText = f.Name;
-            });
-            var model = ObjectMapper.Map<DataSource>(input.DataSource);
+                DataSourceFolderId = input.DataSourceFolderId,
+                Name = input.Name,
+                Remark = input.Remark,
+                SourceContent = input.SourceContent
+            };
+            dto.DataSourceFields = input.DataSourceFields.Select(f =>
+              new DataSourceFieldDto
+              {
+                  Type = f.Type,
+                  DataSourceId = dto.Id,
+                  Filter = f.Filter,
+                  Name = f.Name,
+                  DisplayText = !string.IsNullOrEmpty(f.DisplayText) ? f.DisplayText : f.Name,
+
+              }).ToList();
+            var model = ObjectMapper.Map<DataSource>(dto);
             var id = await _dataSourceRepository.InsertOrUpdateAndGetIdAsync(model);
             _dataSourceFieldRepository.Delete(df => df.DataSourceId == id);
             model.DataSourceFields.ForEach(dfo => _dataSourceFieldRepository.InsertOrUpdate(dfo.MapTo<DataSourceField>()));
@@ -135,8 +149,6 @@ namespace EP.Query.DataSource
 
 
         }
-
-
 
 
 
@@ -187,7 +199,6 @@ namespace EP.Query.DataSource
             var sql = builder.Build;
             int totalCount = 0;
             var ret = new List<JObject>();
-            //sql = "select * from datasouces";
             using (var mysql = _mysqlSchemaFactory.Create())
             {
                 Dictionary<string, string> cols = new Dictionary<string, string>();
@@ -200,16 +211,11 @@ namespace EP.Query.DataSource
 
         public async Task<Dictionary<string, string>> GetQueryColumns(GetQueryColumnsInput input)
         {
-            var builder = new QueryBuilder();
-            builder.AddTableName(input.TableName);
-            builder.AddAndConditions(input.AndConditions);
-            var (total, totalCount) = builder.Build;
 
             Dictionary<string, string> cols = new Dictionary<string, string>();
-            //sql = "select * from datasouces";
             using (var mysql = _mysqlSchemaFactory.Create())
             {
-                var data = mysql.Query((total, totalCount), out cols, out var count, 1, 1);
+                var data = mysql.Query((input.Sql, ""), out cols, out var count, 1, 1);
             }
             return cols;
         }
