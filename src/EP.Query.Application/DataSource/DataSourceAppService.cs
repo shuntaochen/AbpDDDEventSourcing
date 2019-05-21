@@ -153,7 +153,7 @@ namespace EP.Query.DataSource
         /// <returns></returns>
         public async Task<GetSchemasOutput> GetSchemas(DataSourceType dataSourceType)
         {
-            var cached = cacheManager.GetCache(DB_SCHEMA_CACHENAME).Get(DB_SCHEMA_CACHENAME, () =>
+            var cached = cacheManager.GetCache(DB_SCHEMA_CACHENAME).Get(dataSourceType, () =>
             {
                 JArray ret = new JArray();
                 if (dataSourceType == DataSourceType.Form)
