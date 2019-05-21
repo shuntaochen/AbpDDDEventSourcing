@@ -63,8 +63,8 @@ namespace EP.Query.WebApi.Startup
                 options => options.Filters.Add(new CorsAuthorizationFilterFactory(_defaultCorsPolicyName))
             );
 
-            services.AddAspDotCoreAllServices<QueryDbContext>(_appConfiguration, _appConfigurationBuilder,
-                new Assembly[] { Assembly.GetAssembly(typeof(QueryApplicationModule)), Assembly.GetAssembly(typeof(QueryWebApiModule)) });
+            services.AddAspDotCoreAllServices<QueryDbContext>(_appConfiguration, _appConfigurationBuilder);//,
+                //new Assembly[] { Assembly.GetAssembly(typeof(QueryApplicationModule)), Assembly.GetAssembly(typeof(QueryWebApiModule)) });
 
             services.AddSignalR();
 
