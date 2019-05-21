@@ -158,7 +158,7 @@ namespace EP.Query.DataSource
                 JArray ret = new JArray();
                 if (dataSourceType == DataSourceType.Form)
                 {
-                    var data = AsyncHelper.RunSync(() => dynamicFormsServiceApi.GetAllFormsWithControls(new GetAllFormsWithControlsInput { }));
+                    var data = AsyncHelper.RunSync(() => dynamicFormsServiceApi.GetAllFormsWithControls());
                     ret = data;
                 }
                 else
