@@ -65,7 +65,7 @@ namespace EP.Query.DataSource
         /// 获取数据库表架构和字段
         /// </summary>
         /// <returns></returns>
-        Task<GetSchemasOutput> GetSchemas(DataSourceType dataSourceType);
+        Task<List<DataSourceSchemaDto>> GetSchemas(DataSourceType dataSourceType);
         /// <summary>
         /// 根据查询生成字段定义
         /// </summary>
@@ -210,10 +210,23 @@ namespace EP.Query.DataSource
         public int Id { get; set; }
     }
 
-    public class GetSchemasOutput
+
+    public class DataSourceSchemaDto
     {
-        public JArray FieldInfos { get; set; } = new JArray();
+        public string Name { get; set; }
+        public string DisplayName { get; set; }
+        public List<DataSourceSchemaItemDto> DataSourceSchemaItemDtos { get; set; }
+
+
     }
+    public class DataSourceSchemaItemDto
+    {
+        public string Code { get; set; }
+        public string Type { get; set; }
+        public string DisplayName { get; set; }
+        public string Condition { get; set; }
+    }
+
 
 
     public class SaveConfigInput

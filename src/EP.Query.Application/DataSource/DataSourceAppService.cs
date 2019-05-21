@@ -20,6 +20,7 @@ using EP.Commons.ServiceApi.DynamicForms;
 using EP.Commons.ServiceApi;
 using Abp.Runtime.Caching;
 using Abp.Threading;
+using System.Dynamic;
 
 namespace EP.Query.DataSource
 {
@@ -151,29 +152,49 @@ namespace EP.Query.DataSource
         /// 获取数据库表架构和字段
         /// </summary>
         /// <returns></returns>
-        public async Task<GetSchemasOutput> GetSchemas(DataSourceType dataSourceType)
+        public async Task<List<DataSourceSchemaDto>> GetSchemas(DataSourceType dataSourceType)
         {
-            var cached = cacheManager.GetCache(DB_SCHEMA_CACHENAME).Get(dataSourceType, () =>
-            {
-                JArray ret = new JArray();
-                if (dataSourceType == DataSourceType.Form)
-                {
-                    var data = AsyncHelper.RunSync(() => dynamicFormsServiceApi.GetAllFormsWithControls());
-                    ret = data;
-                }
-                else
-                {
-                    using (var mysql = _mysqlSchemaFactory.Create())
-                    {
-                        var tables = mysql.GetTableNames();
-                        var tableWithColumns = tables.Select(name => new { name, fields = mysql.GetTableColumnDefinitions(name) }).ToList();
-                        ret = JArray.FromObject(tableWithColumns);
-                    }
-                }
+            //var cached = cacheManager.GetCache(DB_SCHEMA_CACHENAME).Get(dataSourceType, () =>
+            //{
 
-                return new GetSchemasOutput { FieldInfos = ret };
-            });
-            return cached;
+            //});
+
+            List<DataSourceSchemaDto> rl = new List<DataSourceSchemaDto>();
+            JArray ret = new JArray();
+            if (dataSourceType == DataSourceType.Form)
+            {
+                var data = AsyncHelper.RunSync(() => dynamicFormsServiceApi.GetAllFormsWithControls());
+                ret = data;
+                rl = ret.Select(x => new DataSourceSchemaDto
+                {
+                    Name = x["formConfigName"]?.ToString(),
+                    DataSourceSchemaItemDtos = x["formControls"]?.As<JArray>().Select(y => new DataSourceSchemaItemDto
+                    {
+                        Code = y["controlId"]?.ToString(),
+                        Type = y["valueType"]?.ToString()
+
+                    }).ToList()
+                }).ToList();
+            }
+            else
+            {
+                using (var mysql = _mysqlSchemaFactory.Create())
+                {
+                    var tables = mysql.GetTableNames();
+                    rl = tables.Select(x => new DataSourceSchemaDto
+                    {
+                        Name = x,
+                        DataSourceSchemaItemDtos = mysql.GetTableColumnDefinitions(x).Select(y => new DataSourceSchemaItemDto
+                        {
+                            Code = y.Key,
+                            Type = y.Value
+
+                        }).ToList()
+                    }).ToList();
+                }
+            }
+            return rl;
+            //return rl;
         }
         /// <summary>
         /// 获取数据源和字段
