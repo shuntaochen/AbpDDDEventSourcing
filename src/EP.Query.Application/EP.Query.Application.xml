@@ -4,6 +4,13 @@
         <name>EP.Query.Application</name>
     </assembly>
     <members>
+        <member name="M:EP.Query.DataSource.DataSourceAppService.GetSchemas(EP.Query.DataSource.DataSourceType)">
+            <summary>
+            获取数据源结构
+            </summary>
+            <param name="dataSourceType"></param>
+            <returns></returns>
+        </member>
         <member name="M:EP.Query.DataSource.MysqlTypeConverter.ToSysPreDefined(System.String)">
             <summary>
             统一转换，将后端数据类型转换为前端可理解类型，包括数据库类型和c#编程语言类型
@@ -185,7 +192,7 @@
             <param name="input"></param>
             <returns></returns>
         </member>
-        <member name="M:EP.Query.DataSource.IDataSourceAppService.GetSchemas">
+        <member name="M:EP.Query.DataSource.IDataSourceAppService.GetSchemas(EP.Query.DataSource.DataSourceType)">
             <summary>
             获取数据库表架构和字段
             </summary>

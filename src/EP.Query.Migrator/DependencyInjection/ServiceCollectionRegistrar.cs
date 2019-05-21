@@ -19,9 +19,9 @@ namespace EP.Query.Migrator.DependencyInjection
 
             var cb = AppConfigurations.GetConfigurationBuilder();
 
-            services.AddMicroServiceExtensions(configuration, cb);
+            services.AddMicroServiceExtensions<QueryDbContext>(configuration, cb);
 
-            services.AddCAPService<QueryDbContext>(configuration, new Assembly[] { typeof(QueryCoreModule).Assembly });
+            services.AddCAPService<QueryDbContext>(configuration);//, new Assembly[] { typeof(QueryCoreModule).Assembly });
 
             WindsorRegistrationHelper.CreateServiceProvider(iocManager.IocContainer, services);
         }
