@@ -90,6 +90,31 @@
             <param name="src"></param>
             <returns></returns>
         </member>
+        <member name="T:EP.Query.DataSource.CreateFolderInput">
+            <summary>
+            创建文件夹输入
+            </summary>
+        </member>
+        <member name="P:EP.Query.DataSource.CreateFolderInput.Name">
+            <summary>
+            文件夹名称
+            </summary>
+        </member>
+        <member name="P:EP.Query.DataSource.CreateFolderInput.ParentId">
+            <summary>
+            文件夹父Id
+            </summary>
+        </member>
+        <member name="T:EP.Query.DataSource.CreateFolderOutput">
+            <summary>
+            创建文件夹返回
+            </summary>
+        </member>
+        <member name="P:EP.Query.DataSource.CreateFolderOutput.Id">
+            <summary>
+            返回新创建的文件夹Id
+            </summary>
+        </member>
         <member name="P:EP.Query.DataSource.DataSourceDto.DataSourceFolderId">
             <summary>
             文件夹编号
@@ -170,6 +195,31 @@
             租户id
             </summary>
         </member>
+        <member name="T:EP.Query.DataSource.DataSourceFieldInput">
+            <summary>
+            新建数据源字段时输入请求
+            </summary>
+        </member>
+        <member name="P:EP.Query.DataSource.DataSourceFieldInput.Name">
+            <summary>
+            名称
+            </summary>
+        </member>
+        <member name="P:EP.Query.DataSource.DataSourceFieldInput.Type">
+            <summary>
+            类型
+            </summary>
+        </member>
+        <member name="P:EP.Query.DataSource.DataSourceFieldInput.DisplayText">
+            <summary>
+            显示名称
+            </summary>
+        </member>
+        <member name="P:EP.Query.DataSource.DataSourceFieldInput.Filter">
+            <summary>
+            过滤条件
+            </summary>
+        </member>
         <member name="P:EP.Query.DataSource.DataSourceFolderDto.ParentId">
             <summary>
             父id
@@ -213,6 +263,186 @@
         <member name="P:EP.Query.DataSource.DataSourceFolderDto.LastModificationTime">
             <summary>
             修改时间
+            </summary>
+        </member>
+        <member name="T:EP.Query.DataSource.DataSourceSchemaDto">
+            <summary>
+            数据源架构数据传输对象
+            </summary>
+        </member>
+        <member name="P:EP.Query.DataSource.DataSourceSchemaDto.Name">
+            <summary>
+            名称
+            </summary>
+        </member>
+        <member name="P:EP.Query.DataSource.DataSourceSchemaDto.DisplayName">
+            <summary>
+            显示名称
+            </summary>
+        </member>
+        <member name="P:EP.Query.DataSource.DataSourceSchemaDto.DataSourceSchemaItemDtos">
+            <summary>
+            字段信息列表
+            </summary>
+        </member>
+        <member name="T:EP.Query.DataSource.DataSourceSchemaItemDto">
+            <summary>
+            数据源字段信息
+            </summary>
+        </member>
+        <member name="P:EP.Query.DataSource.DataSourceSchemaItemDto.Code">
+            <summary>
+            名称
+            </summary>
+        </member>
+        <member name="P:EP.Query.DataSource.DataSourceSchemaItemDto.Type">
+            <summary>
+            类型
+            </summary>
+        </member>
+        <member name="P:EP.Query.DataSource.DataSourceSchemaItemDto.DisplayName">
+            <summary>
+            显示名称
+            </summary>
+        </member>
+        <member name="P:EP.Query.DataSource.DataSourceSchemaItemDto.Condition">
+            <summary>
+            过滤条件
+            </summary>
+        </member>
+        <member name="T:EP.Query.DataSource.DeleteInput">
+            <summary>
+            删除数据源输入请求
+            </summary>
+        </member>
+        <member name="P:EP.Query.DataSource.DeleteInput.Id">
+            <summary>
+            要删除的数据源Id
+            </summary>
+        </member>
+        <member name="T:EP.Query.DataSource.GetALlInput">
+            <summary>
+            获取文件夹下文件夹和数据源输入
+            </summary>
+        </member>
+        <member name="P:EP.Query.DataSource.GetALlInput.FolderId">
+            <summary>
+            文件夹Id
+            </summary>
+        </member>
+        <member name="T:EP.Query.DataSource.GetALlOutput">
+            <summary>
+            获取到文件夹下文件夹和数据源集合
+            </summary>
+        </member>
+        <member name="P:EP.Query.DataSource.GetALlOutput.Folders">
+            <summary>
+            子文件夹
+            </summary>
+        </member>
+        <member name="T:EP.Query.DataSource.GetQueryColumnsInput">
+            <summary>
+            获取查询列请求
+            </summary>
+        </member>
+        <member name="P:EP.Query.DataSource.GetQueryColumnsInput.Sql">
+            <summary>
+            直接sql
+            </summary>
+        </member>
+        <member name="T:EP.Query.DataSource.GetQueryDataInput">
+            <summary>
+            获取查询数据请求
+            </summary>
+        </member>
+        <member name="P:EP.Query.DataSource.GetQueryDataInput.TableName">
+            <summary>
+            表名称
+            </summary>
+        </member>
+        <member name="P:EP.Query.DataSource.GetQueryDataInput.AndConditions">
+            <summary>
+            查询条件
+            </summary>
+        </member>
+        <member name="T:EP.Query.DataSource.GetQueryDataOutput">
+            <summary>
+            查询数据返回结果输出
+            </summary>
+        </member>
+        <member name="T:EP.Query.DataSource.RenameInput">
+            <summary>
+            重命名文件夹请求
+            </summary>
+        </member>
+        <member name="P:EP.Query.DataSource.RenameInput.Id">
+            <summary>
+            要命名的文件夹Id
+            </summary>
+        </member>
+        <member name="P:EP.Query.DataSource.RenameInput.Name">
+            <summary>
+            新名称
+            </summary>
+        </member>
+        <member name="T:EP.Query.DataSource.RenameOutput">
+            <summary>
+            文件夹重命名结果
+            </summary>
+        </member>
+        <member name="P:EP.Query.DataSource.RenameOutput.Id">
+            <summary>
+            文件夹Id
+            </summary>
+        </member>
+        <member name="T:EP.Query.DataSource.SaveInput">
+            <summary>
+            添加或修改数据源请求
+            </summary>
+        </member>
+        <member name="P:EP.Query.DataSource.SaveInput.DataSourceFolderId">
+            <summary>
+            文件夹编号
+            </summary>
+        </member>
+        <member name="P:EP.Query.DataSource.SaveInput.Name">
+            <summary>
+            名称
+            </summary>
+        </member>
+        <member name="P:EP.Query.DataSource.SaveInput.Type">
+            <summary>
+            类型
+            </summary>
+        </member>
+        <member name="P:EP.Query.DataSource.SaveInput.SourceContent">
+            <summary>
+            数据源总个数
+            </summary>
+        </member>
+        <member name="P:EP.Query.DataSource.SaveInput.Remark">
+            <summary>
+            备注
+            </summary>
+        </member>
+        <member name="P:EP.Query.DataSource.SaveInput.Id">
+            <summary>
+            修改时数据源Id
+            </summary>
+        </member>
+        <member name="P:EP.Query.DataSource.SaveInput.DataSourceFields">
+            <summary>
+            数据源下字段
+            </summary>
+        </member>
+        <member name="T:EP.Query.DataSource.SaveOutput">
+            <summary>
+            保存数据源输出
+            </summary>
+        </member>
+        <member name="P:EP.Query.DataSource.SaveOutput.Id">
+            <summary>
+            保存的数据源Id
             </summary>
         </member>
         <member name="M:EP.Query.DataSource.IDataSourceAppService.CreateFolder(EP.Query.DataSource.CreateFolderInput)">
@@ -293,51 +523,6 @@
             <param name="skipCount"></param>
             <param name="maxResultCount"></param>
             <returns></returns>
-        </member>
-        <member name="P:EP.Query.DataSource.SaveInput.DataSourceFolderId">
-            <summary>
-            文件夹编号
-            </summary>
-        </member>
-        <member name="P:EP.Query.DataSource.SaveInput.Name">
-            <summary>
-            名称
-            </summary>
-        </member>
-        <member name="P:EP.Query.DataSource.SaveInput.Type">
-            <summary>
-            类型
-            </summary>
-        </member>
-        <member name="P:EP.Query.DataSource.SaveInput.SourceContent">
-            <summary>
-            数据源总个数
-            </summary>
-        </member>
-        <member name="P:EP.Query.DataSource.SaveInput.Remark">
-            <summary>
-            备注
-            </summary>
-        </member>
-        <member name="P:EP.Query.DataSource.DataSourceFieldInput.Name">
-            <summary>
-            名称
-            </summary>
-        </member>
-        <member name="P:EP.Query.DataSource.DataSourceFieldInput.Type">
-            <summary>
-            类型
-            </summary>
-        </member>
-        <member name="P:EP.Query.DataSource.DataSourceFieldInput.DisplayText">
-            <summary>
-            显示名称
-            </summary>
-        </member>
-        <member name="P:EP.Query.DataSource.DataSourceFieldInput.Filter">
-            <summary>
-            过滤条件
-            </summary>
         </member>
         <member name="F:EP.Query.QueryAppConsts.DefaultPassPhrase">
             <summary>
